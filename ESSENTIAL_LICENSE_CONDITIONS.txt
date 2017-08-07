@@ -1,0 +1,15 @@
+To be acknowledged by users (boxes):
+
+(x) YOU ACKNOWLEDGE THAT YOU HAVE READ THE LICENSE AGREEMENT, UNDERSTAND IT AND AGREE TO BE BOUND BY ITS TERMS AND CONDITIONS. 
+
+It is important that you read the entirety of and understand the License Agreement. There are, however, a few key points that we need to emphasise:
+
+(x) NO WARRANTY: The Software is provided "as is" and any express or implied warranties are disclaimed
+
+(x) NON-COMMERCIAL USE: The license granted is for internal, non-commercial research by academic institutions only. Any use of the SOFTWARE for commercial research or to manufacture or sell products or technologies (or portions thereof) either directly or indirectly for any direct or indirect for-profit purposes is strictly prohibited.
+
+(x) NO DISTRIBUTION: You are not allowed to sublicense or distribute the SOFTWARE in whole or in part to any third party
+
+(x) CITATION: You agree to reference the publication “histoCAT: analysis of cell phenotypes and interactions in multiplex image cytometry data.”1 and acknowledge University of Zurich as the source of the SOFTWARE in any publications reporting use of it or any manual or document. A copy of all reports and papers that are for public or general release that use the SOFTWARE must be forwarded immediately upon release or publication to the SOFTWARE Principal Investigator.
+
+1 Schapiro, D. and Jackson HW et al. histoCAT: analysis of cell phenotypes and interactions in multiplex image cytometry data. Nature Methods, August 2017, doi:10.1038/nmeth.4391.

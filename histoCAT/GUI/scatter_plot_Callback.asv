@@ -1,0 +1,170 @@
+
+% --- Executes on clicking on 'Plot' button either after running tsne or
+% before.
+function scatter_plot_Callback(hObject, eventdata, handles)
+% hObject    handle to scatter_plot (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+    handles      = gethand;
+    
+    %Retrieve Variables
+        hplots_gates  = retr('hplots_gates');
+        tabmaster_histonetiff = retr('tabmaster_histonetiff');
+        
+    %Get the current radio button's value.
+    if handles.radio_original.Value == 1
+        selected_gates = get(handles.list_samples, 'Value');
+        selectedChannels = get(handles.list_channels,'Value');
+        sessionData  = retr('sessionData');
+        gates        = retr('gates');
+        gateContext  = retr('gateContext');
+        channelNames = retr('list_channels');
+    elseif handles.radio_custom.Value == 1
+        selected_gates = get(handles.custom_samples, 'Value');
+        selectedChannels = get(handles.custom_channels,'Value');
+        sessionData  = retr('sessionData_custom');
+        gates       = retr('gates_custom');
+        gateContext  = retr('gateContext_custom');
+        channelNames = retr('custom_channels');
+    end
+    
+    put('vX',[]);
+    put('vY',[]);
+    put('hplots',[]);
+    %Buttons disabled/enabled
+    %To be added
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    
+    
+    %To clear earlier plots from view channels
+    %To be added
+    if isempty(hplots_gates) ~= 1
+          delete(hplots_gates);
+          put('hplots_gates',[]);
+    end
+    
+    tabmaster_histonetiff.Children.delete;
+    hold off;
+    handles.panel_tiff_images.
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+    
+    
+    
+    if numel(selectedChannels) > 2
+        if ~(selectedChannels(3) > 1)
+            selectedChannels(3) = [];
+        end
+    end
+    
+    nSelChannels     = numel(selectedChannels);
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    
+    if nSelChannels>3
+        msgbox('Too many channels for scatter plot, choose Heat-map of channels');
+        return;
+    end
+    
+    if nSelChannels<2
+        msgbox('Select atleast 2 channels to plot');
+        return;
+    end
+    
+    % if no channel selected => select all channels
+    if (numel(selected_gates)==0 || nSelChannels==0) 
+        selected_gates = 1:size(gates, 1);
+    end
+    
+    try
+        if (isempty(gateContext) || isempty(selectedChannels)) return; end
+    catch
+        if (isempty(gateContext_custom) || isempty(selectedChannels)) return; end
+    end
+    
+    nCH1 = selectedChannels(1);
+    nCH2 = selectedChannels(2); 
+    nCH3 = 0;
+   
+    if (nSelChannels == 3) 
+        nCH3 = selectedChannels(3);
+        
+    end
+    nChColor = 0;
+   
+     % color by gate
+     if (nChColor == 0)
+        
+        % add filter
+        intIndices = getIntIndices;
+                             
+        aggregateinds = [];
+        vColor = [];
+        for gi=selected_gates
+            currGate = gates{gi, 2};
+            if (~isempty(intIndices))
+                currGate = intersect(intIndices, currGate);
+            end
+            vColor = [vColor; ones(numel(currGate), 1)*gi];
+            aggregateinds = [aggregateinds; currGate(:)];
+        end
+        vX = sessionData(aggregateinds, nCH1);
+        vY = sessionData(aggregateinds, nCH2);
+
+            if (nSelChannels == 3)
+                vZ = sessionData(aggregateinds, nCH3);
+            else
+                vZ = vColor;
+            
+            end
+
+        % plot 
+          clr = distinguishable_colors(numel(selected_gates));
+
+        
+            vColor_discrete = vColor;
+            colors = unique(vColor)';
+            for ci=1:numel(colors);
+                vColor_discrete(vColor==colors(ci)) = ci;
+            end
+            
+           handles.panel_plots;
+           hplots_gates = subplot(1,1,1,'Parent',handles.panel_plots);
+           
+           myplotclr(vX, vY, vZ, vColor_discrete, '.', clr, [min(vColor_discrete), max(vColor_discrete)], false);
+           hold on;
+           grid on;
+           %handles.axes_for_plots.Position = [0.6110    0.1763    0.3947    0.7479];
+           
+           colorbar off;
+
+        if numel(selected_gates) > 1
+           legend_gates = legend(remove_repeating_strings(gates(selected_gates, 1)), 'Interpreter', 'none',1);
+           put('legend_gates',legend_gates);
+            if (numel(selected_gates) > 6)
+                set(legend_gates, 'Location','NorthEastOutside');
+                set(legend_gates,'FontSize',6);
+            end
+        end
+ 
+       
+    end
+     xlabel(channelNames{nCH1}, 'Interpreter', 'none');
+     ylabel(channelNames{nCH2}, 'Interpreter', 'none');
+     if (nSelChannels == 3)
+        zlabel(channelNames{nCH3});
+        view(3);
+    end
+     hold on;
+    
+    %Update variables
+    put('hplots_gates',hplots_gates);
+    put('vX',vX);
+    put('vY',vY);
+    put('nCH1',nCH1);
+    put('nCH2',nCH2);
+    if nCH3 ~= 0 
+        put('nCH3',nCH3);
+    end
+    set(handles.list_channels,'Value',[]);
+    set(handles.list_channels,'Value',1);
+end
