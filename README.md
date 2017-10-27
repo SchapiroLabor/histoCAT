@@ -38,5 +38,5 @@ All other data associated with the Nature Methods publication can be found here:
 
 ## Using histoCAT from source
 
-Please use MatLab2014b and load the full histoCAT folder into your MATLAB path. Run `histoCAT.m` to start histoCAT from source.
+Please use MATLAB2014b and load the full histoCAT folder into your MATLAB path. Run `histoCAT.m` to start histoCAT from source.
 
