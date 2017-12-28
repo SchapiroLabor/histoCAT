@@ -36,7 +36,7 @@ The Nature Methods breast cancer data set (large) as a histoCAT session data can
 All other data associated with the Nature Methods publication can be found here:
 [histoCAT@BodenmillerLab.org](http://www.bodenmillerlab.org/research-2/histocat/)
 
-## Using miCAT from source
+## Using histoCAT from source
 
-Please use MatLab2014b and load the full histoCAT folder into your MatLab path. Run `histoCAT.m` to start histoCAT from source.
+Please use MATLAB2014b and load the full histoCAT folder into your MATLAB path. Run `histoCAT.m` to start histoCAT from source.
 
