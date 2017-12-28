@@ -32,8 +32,7 @@ if isempty(samplefolders) == 1
 end
 
 %Retrieve the status of first time loading 0 or 1
-loadflag = retr('loadflag')
-
+loadflag = retr('loadflag');
 
 %Start timing
 tic
@@ -41,6 +40,11 @@ tic
 %Load all the db files
 [Sample_Set_arranged,Mask_all,Tiff_all,...
     Tiff_name]= Load_MatrixDB(samplefolders,Sample_Set_arranged,Mask_all);
+
+%If the spot detection plug-in folder exists, call spot detection
+if exist('SpotDetection','dir')
+    [Tiff_all,Tiff_name] = spot_detection_master(Tiff_name,Tiff_all);
+end
 
 %Function call to get the single cell info into matrix
 [Fcs_Interest_all] = DataProcessing_Master(Mask_all,Tiff_all,Tiff_name,HashID,Fcs_Interest_all);
@@ -110,7 +114,9 @@ list_samples_Callback;
 %previously defined
 handles=gethand;
 expansionfeature = retr('expansionfeature');
-set(handles.pixelexpansion_dropdown,'Value',expansionfeature+1);
+expansion_range = retr('expansion_range');
+set(handles.pixelexpansion_dropdown,'String',expansion_range);
+set(handles.pixelexpansion_dropdown,'Value',length(expansion_range));
 Pixelexpansion_callback;
 
 end

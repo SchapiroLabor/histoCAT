@@ -44,6 +44,19 @@ else
     data_without_neighbors = sessionData(:,[1:(neighbor_start_session-1),empty_end+1:size(sessionData,2)]);
 end
 
+%Replace the imageIDs used in histoCAT with the image IDs
+%originally assigned by CellProfiler in order to be able to compare
+%data with other CellProfiler output (often these are the same IDs
+%but sometimes CellProfiler skips a number)
+CellIDs_by_CellProfiler = retr('CellIDs_by_CellProfiler');
+if ~isempty(CellIDs_by_CellProfiler)
+    imageIDs_corresp = sessionData([gates{1:length(CellIDs_by_CellProfiler),2}],1);
+    all_originalIDs = cell2mat(CellIDs_by_CellProfiler');
+    ImageId_CellId = [imageIDs_corresp,all_originalIDs];
+    histoCAT_ImageId_CellId = unique(data_without_neighbors(:,1:2),'rows','stable');
+    data_without_neighbors(:,1:2) = changem(data_without_neighbors(:,1:2),ImageId_CellId, histoCAT_ImageId_CellId);
+end
+
 
 %Save each image as an fcs file to custom_gatesfolder
 for i=1:length(gates(:,1))

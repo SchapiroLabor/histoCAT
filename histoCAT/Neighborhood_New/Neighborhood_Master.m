@@ -1,5 +1,5 @@
 function [] = Neighborhood_Master(permutations,pixelexpansion,pVal_sig,gates,...
-    selectedall_gates,sessionData,custom_gatesfolder,Special_clusters_name,Extra_information,cut_off_percent)
+    selectedall_gates,sessionData,custom_gatesfolder,Special_clusters_name,Extra_information,cut_off_percent,patch_det)
 % NEIGHBORHOOD_MASTER Calculates whether a neighboorhood is significant
 % Currently only works for all images selected and one Phenograph
 % available.
@@ -32,21 +32,31 @@ neigb_index = cellfun(@(x) find(~cellfun('isempty',regexp(x,expansion_name))),..
 % Get phenograph index for each image
 Phenograph_index = cellfun(@(x) find(~cellfun('isempty',regexp(x,'Phenograph'))),...
     gates(selectedall_gates,3),'UniformOutput',false);
+% Get custom clustering index for each image
+CustomClustering_index = cellfun(@(x) find(~cellfun('isempty',regexp(x,'customClusters'))),...
+    gates(selectedall_gates,3),'UniformOutput',false);
+% Get custom clustering index for each image
+kmeans_index = cellfun(@(x) find(~cellfun('isempty',regexp(x,'k_mean'))),...
+    gates(selectedall_gates,3),'UniformOutput',false);
+
+%Indices of all possible clustering methods
+all_clusterings = [cell2mat(Phenograph_index), cell2mat(CustomClustering_index),cell2mat(kmeans_index)];
+
 
 % for multiple phenograph runs
-[max_size, max_index] = max(cellfun('size', Phenograph_index, 2));
+[max_size, max_index] = max(size(all_clusterings, 2));
 Phenograph_index_selected = {};
 if max_size>1
     [selected,~] = listdlg('PromptString','Select Phenograph to use',...
         'SelectionMode','single',...
         'ListSize',[160,150],...
-        'ListString',gates{max_index,3}(Phenograph_index{1,1}))
+        'ListString',gates{max_index,3}(all_clusterings(1,:)));
     put('selected',selected);
-    for i = 1:size(Phenograph_index,1)
-        Phenograph_index_selected{i,1} = Phenograph_index{i,1}(selected);
+    for i = 1:size(all_clusterings,1)
+        Phenograph_index_selected{i,1} = all_clusterings(max_index,selected);
     end
 else
-    Phenograph_index_selected = Phenograph_index;
+    Phenograph_index_selected = mat2cell(all_clusterings,ones(length(all_clusterings),1),1);
 end
 
 % Parfor progress bar
@@ -60,8 +70,8 @@ parfor image_num=1:size(selectedall_gates,2)
     %     % Check whether gates are present
     %     if selectedall_gates(image_num)==image_num;
     
-    [pValue_higher,pValue_lower,real_data_mean,combos_all,Phenograph_index] = Neighborhood_Individual_Image(permutations,...
-        selectedall_gates,gates,sessionData,image_num,expansion_name,Phenograph_index_selected);
+    [pValue_higher,pValue_lower,real_data_mean,combos_all] = Neighborhood_Individual_Image(permutations,...
+        selectedall_gates,gates,sessionData,image_num,expansion_name,Phenograph_index_selected,patch_det);
     Higher_logic = pValue_higher<pVal_sig;
     Lower_logic = pValue_lower<pVal_sig;
     
@@ -73,7 +83,7 @@ parfor image_num=1:size(selectedall_gates,2)
     %     gates{selectedall_gates(image_num),5} = [combos_all,Higher_logic];
     %     gates{selectedall_gates(image_num),6} = [combos_all,Lower_logic];
     %     end
-    Phenograph_index_name{image_num} = Phenograph_index;
+    Phenograph_index_name{image_num} = Phenograph_index_selected;
     hbar.iterate(1);
 end
 toc
@@ -81,11 +91,11 @@ close(hbar);
 % Heatmaps for each images individual and special cluster combinations
 [Matrix_Delta,Matrix_low,Unique_all,Unique_low_all,Matrix_high,Unique_high_all,pheno_name]...
     = Heatmap_individual_images(parfor_gates_high,parfor_gates_low,selectedall_gates,pixelexpansion,...
-    permutations,Phenograph_index_name,custom_gatesfolder,gates,Special_clusters_name,Extra_information,pVal_sig,cut_off_percent);
+    permutations,Phenograph_index_name,custom_gatesfolder,gates,Special_clusters_name,Extra_information,pVal_sig,cut_off_percent,patch_det);
 
 % Generate an assymmetric heatmap
 Asymmetric_heatmap(parfor_gates_high,parfor_gates_low, Matrix_high,...
-    Matrix_low,Unique_high_all,Unique_low_all,pheno_name,pixelexpansion,permutations,custom_gatesfolder,Extra_information,pVal_sig,cut_off_percent);
+    Matrix_low,Unique_high_all,Unique_low_all,pheno_name,pixelexpansion,permutations,custom_gatesfolder,Extra_information,pVal_sig,cut_off_percent,patch_det);
 
 end
 

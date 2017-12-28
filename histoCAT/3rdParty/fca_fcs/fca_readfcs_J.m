@@ -87,15 +87,17 @@ if strcmp(fcsheader_type,'FCS1.0')
     return;
 elseif  strcmp(fcsheader_type,'FCS2.0') || strcmp(fcsheader_type,'FCS3.0') % FCS2.0 or FCS3.0 types
     fcshdr.fcstype = fcsheader_type;
-    FcsHeaderStartPos   = str2num(char(fcsheader_1stline(16:18)'));
-    FcsHeaderStopPos    = str2num(char(fcsheader_1stline(23:27)'));
-    ind = 36;%if higher the numbers grow together and can't be distinguished anymore
-    FcsDataStartPos     = str2num(char(fcsheader_1stline(31:ind)'));
-    count=1;
-    while length(FcsDataStartPos)>1
-        FcsDataStartPos     = str2num(char(fcsheader_1stline(31:(ind-count))'));
-        count = count+1;
-    end
+    
+    %Modified by Guocheng Yuan (SCUBA)
+    empty_space = find(fcsheader_1stline == 32);
+    I = find(empty_space(2:end) - empty_space(1:end-1) ~= 1);
+    empty_start = empty_space([1; I+1]);
+    empty_end = empty_space([I; length(empty_space)]);
+    FcsHeaderStartPos   = str2num(char(fcsheader_1stline(empty_end(1)+1:empty_start(2)-1)'));
+    FcsHeaderStopPos    = str2num(char(fcsheader_1stline(empty_end(2)+1:empty_start(3)-1)'));
+    FcsDataStartPos     = str2num(char(fcsheader_1stline(empty_end(3)+1:empty_start(4)-1)'));
+    %End modification
+    
     status = fseek(fid,FcsHeaderStartPos,'bof');
     fcsheader_main = fread(fid,FcsHeaderStopPos-FcsHeaderStartPos+1,'char');%read the main header
     warning off MATLAB:nonIntegerTruncatedInConversionToChar;

@@ -18,7 +18,8 @@ global HashID
 global Mask_all
 Tiff_name = retr('Tiff_name');
 Tiff_all = retr('Tiff_all');
-expansionfeature = handles.pixelexpansion_dropdown.String{handles.pixelexpansion_dropdown.Value};
+expansionfeature_value = handles.pixelexpansion_dropdown.Value;
+expansionfeature_range = handles.pixelexpansion_dropdown.String;
 notNan = retr('notNan');
 
 
@@ -33,7 +34,7 @@ if isequal(filename,0) || isequal(pathname,0)
     return;
 end
 
-save([pathname filename], 'sessionData','gates','sessiondata_index','allids','Fcs_Interest_all','Sample_Set_arranged','HashID','Mask_all','Tiff_name','Tiff_all','expansionfeature','notNan','-v7.3'); 
+save([pathname filename], 'sessionData','gates','sessiondata_index','allids','Fcs_Interest_all','Sample_Set_arranged','HashID','Mask_all','Tiff_name','Tiff_all','expansionfeature_value','expansionfeature_range','notNan','-v7.3'); 
 
 
 end

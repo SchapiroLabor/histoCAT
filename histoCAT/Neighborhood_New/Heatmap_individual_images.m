@@ -1,6 +1,6 @@
 function [Matrix_Delta,Matrix_low,Unique_all,Unique_low_all,Matrix_high,Unique_high_all,pheno_name]...
     = Heatmap_individual_images(parfor_gates_high,parfor_gates_low,selectedall_gates,pixelexpansion,permutations,...
-    Phenograph_index,custom_gatesfolder,gates,Special_clusters_name,Extra_information,pVal_sig,cut_off_percent)
+    Phenograph_index,custom_gatesfolder,gates,Special_clusters_name,Extra_information,pVal_sig,cut_off_percent,patch_det)
 % HEATMAP_INDIVIDUAL_IMAGES Generates a clustergram with each image individual
 %
 % Input:
@@ -105,7 +105,7 @@ Delta = clustergram(Matrix_Delta_cut_noNaN,'RowLabels',gates(selectedall_gates',
 plot_delta =plot(Delta);
 
 % Save clustergram for all images
-saveas(plot_delta,fullfile(custom_gatesfolder,['Clustergram_all_Pixel',num2str(pixelexpansion),...
+saveas(plot_delta,fullfile(custom_gatesfolder,['Clustergram_all_Pixel',num2str(pixelexpansion),'_PatchDetection',num2str(patch_det),...
     '_Perm_',num2str(permutations),'_',pheno_name,'_',Extra_information,'significance_cutoff',num2str(pVal_sig),'.fig']));
 
 % Search for special cases
@@ -136,13 +136,13 @@ higher_special = clustergram(Matrix_cut_special_noNaN,'RowLabels',gates(selected
 plot_delta_special =plot(higher_special);
 
 % Save special output clustergram
-saveas(plot_delta_special,fullfile(custom_gatesfolder,['Clustergram_special_Pixel',num2str(pixelexpansion),'_Perm_',num2str(permutations),'_',pheno_name,'_SpecialCluster',Special_clusters_name,'_',Extra_information,'significance_cutoff',num2str(pVal_sig),'.fig']));
+saveas(plot_delta_special,fullfile(custom_gatesfolder,['Clustergram_special_Pixel',num2str(pixelexpansion),'_PatchDetection',num2str(patch_det),'_Perm_',num2str(permutations),'_',pheno_name,'_SpecialCluster',Special_clusters_name,'_',Extra_information,'significance_cutoff',num2str(pVal_sig),'.fig']));
 
 % User input: Do you want to save an interactive clustergram into the
 % customs folder?
 save_data_forInteractive = questdlg('Would you like to save the data to rebuild the interactive clustergram?','Interactive clustergram');
 if strcmp(save_data_forInteractive,'Yes')
-    save(fullfile(custom_gatesfolder,['Data_for_interactive_clustergram_','pixelexpansion',num2str(pixelexpansion),'_Perm',num2str(permutations),'_',pheno_name,'_',Extra_information,'significance_cutoff',num2str(pVal_sig),'.mat']))
+    save(fullfile(custom_gatesfolder,['Data_for_interactive_clustergram_','pixelexpansion',num2str(pixelexpansion),'_PatchDetection',num2str(patch_det),'_Perm',num2str(permutations),'_',pheno_name,'_',Extra_information,'significance_cutoff',num2str(pVal_sig),'.mat']))
 end
 
 end

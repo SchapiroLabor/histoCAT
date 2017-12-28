@@ -34,54 +34,62 @@ if isempty(tab_axes) == 1
     put('tab_axes1',tab_axes);
 end
 
-%Loop through the selected tiffs (channels)
-for k=1:length(tiff_matrix{1,imh})
+%We can only visualize 6 colors - Show error
+if length(tiff_matrix{1,imh})<=6
+    
+    %Loop through the selected tiffs (channels)
+    for k=1:length(tiff_matrix{1,imh})
+        
+        %Scale image
+        tiffimage_read = mat2gray(tiff_matrix{1,imh}{k});
+        
+        %Focus on axes
+        handles.panel_tiff_images;
+        axes(tab_axes);
+        hold on;
+        
+        %If it is the first image, set background as the BWimage
+        if k == 1
+            blackim = imshow(tiffimage_read);
+            set(blackim,'Tag','firstgrayimage');
+            hold on;
+        end
+        
+        %Function call to convert image to RGB
+        [rgb_Image] = make_rgb( tiffimage_read,colorstouse,k);
+        hold on;
+        
+        %Display RGB image
+        imagesh = imshow(rgb_Image);freezeColors;
+        hold on;
+        
+        %Tag image
+        set(imagesh,'Tag',strcat('rgbimage',int2str(k)));
+        hold off;
+        
+        %Freeze colors
+        freezeColors;
+        
+        %Adjust the intensity of the cell colors if multiple channels are
+        %selected
+        if length(tiff_matrix{1,imh}) ~= 1
+            disp('Applying contrast to image to display all markers')
+            intensemask =  imadjust(tiffimage_read);
+        else
+            intensemask =  tiffimage_read;
+        end
+        
+        %Set the alphadata of the RGB image to the adjusted grayimage
+        set(imagesh,'AlphaData',intensemask);
+        freezeColors;
+        
+        hold off;
        
-    %Scale image
-    tiffimage_read = mat2gray(tiff_matrix{1,imh}{k});
+    end  
     
-    %Focus on axes
-    handles.panel_tiff_images;
-    axes(tab_axes);
-    hold on;
-    
-    %If it is the first image, set background as the BWimage
-    if k == 1
-        blackim = imshow(tiffimage_read);
-        set(blackim,'Tag','firstgrayimage');
-        hold on;     
-    end
-    
-    %Function call to convert image to RGB
-    [rgb_Image] = make_rgb( tiffimage_read,colorstouse,k);
-    hold on;
-    
-    %Display RGB image
-    imagesh = imshow(rgb_Image);freezeColors;
-    hold on;
-    
-    %Tag image
-    set(imagesh,'Tag',strcat('rgbimage',int2str(k)));
-    hold off;
-    
-    %Freeze colors
-    freezeColors;
-    
-    %Adjust the intensity of the cell colors if multiple channels are
-    %selected
-    if length(tiff_matrix{1,imh}) ~= 1
-        disp('Applying contrast to image to display all markers')
-        intensemask =  imadjust(tiffimage_read);
-    else
-        intensemask =  tiffimage_read;
-    end
- 
-    %Set the alphadata of the RGB image to the adjusted grayimage
-    set(imagesh,'AlphaData',intensemask);
-    freezeColors;
-    
-    hold off;
-    
+else
+    %Show error if more than 6 markers
+    errordlg('Please select maximum 6 channels simultaneously');
 end
 
 %If multiple channels are selected

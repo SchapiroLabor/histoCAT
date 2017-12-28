@@ -34,13 +34,12 @@ if cellfun(@isempty,Sample_Set_arranged(i)) == 0
     maskfound = find(~cellfun('isempty',regexpi(fileList,'[.]mat')))';
     
     %If mask exists as a tiff file. Only one!
-    tiff_position = find(~cellfun('isempty',regexp(fileList,'\.tif*')))';
-    selectedtiff = find(~cellfun('isempty',regexpi(fileList,'_mask.tiff|.mask.tiff')))';
+    selectedtiff = find(~cellfun('isempty',regexpi(fileList,'_mask.tif*|.mask.tif*')))';
     
     %If a tiff-mask was found
     if isempty(selectedtiff) == 0
         
-        MaskDir = fileList{tiff_position(selectedtiff)};
+        MaskDir = fileList{selectedtiff};
         %Load mask
         Mask_all(i).Image = imread(char(MaskDir));
         
@@ -161,22 +160,37 @@ end
 %cellProfiler, replace all of them, so there won't be missing cellIDs
 %anymore
 try quest_mask;
-    if strcmp(quest_mask,'No') ~= 1 %if there was no mask
+    if strcmp(quest_mask,'No') ~= 1 %if there was a mask
         cellIDs = unique(Mask_all(i).Image);
         cellIDs = cellIDs(cellIDs~=0);
         if ~isempty(setdiff(1:cellIDs(length(cellIDs)),cellIDs))
-            temp = changem(Mask_all(i).Image,[1:length(cellIDs)],cellIDs);
-            Mask_all(i).Image = temp;
+           [a,b] = ismember(Mask_all(i).Image,cellIDs);
+           newIds = 1:length(cellIDs);
+           Mask_all(i).Image(a) =  newIds(b(a));
         end
+        %Save original cellIDs in order to be able to map the cells back to
+        %other cellProfiler output (the original cellIDs will be reassigned when exporting as CSV/fcs)
+        CellIDs_by_CellProfiler = retr('CellIDs_by_CellProfiler');
+        CellIDs_by_CellProfiler{i} = cellIDs;
+        put('CellIDs_by_CellProfiler',CellIDs_by_CellProfiler);
     end
 catch
     cellIDs = unique(Mask_all(i).Image);
     cellIDs = cellIDs(cellIDs~=0);
     %if there was a mask and some cellIDs are missing, replace them
     if ~isempty(setdiff(1:cellIDs(length(cellIDs)),cellIDs))
-        temp = changem(Mask_all(i).Image,[1:length(cellIDs)],cellIDs);
-        Mask_all(i).Image = temp;
+       [a,b] = ismember(Mask_all(i).Image,cellIDs);
+       newIds = 1:length(cellIDs);
+       Mask_all(i).Image(a) =  newIds(b(a));
     end
+    
+    %Save original cellIDs in order to be able to map the cells back to
+    %other cellProfiler output (the original cellIDs will be reassigned when exporting as CSV/fcs)
+    CellIDs_by_CellProfiler = retr('CellIDs_by_CellProfiler');
+    CellIDs_by_CellProfiler{i} = cellIDs;
+    put('CellIDs_by_CellProfiler',CellIDs_by_CellProfiler);
 end
+
+
 
 end

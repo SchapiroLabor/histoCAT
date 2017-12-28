@@ -32,7 +32,7 @@ if percent == 0
 else
     
     %Get value of percentile corresponding to given cut-off
-    percentile = prctile(valuevec, 100-percent);
+    percentile = prctile(valuevec, percent);
     
     %Find values above given percentile and set them down to value of
     %percentile

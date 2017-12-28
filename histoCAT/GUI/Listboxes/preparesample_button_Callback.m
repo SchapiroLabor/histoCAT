@@ -56,5 +56,14 @@ if Logic_Neighbrhood
     Neighborhood_callback;
 end
 
+%If custom clustering option is selected
+Logic_customClusters = strcmp(handles.preparesample_options.String{handles.preparesample_options.Value},...
+    'Custom Clustering');
+if Logic_customClusters
+    %Function call to generate custom clustering based on selected samples
+    custom_clusters;
+end
+
+
 end
 

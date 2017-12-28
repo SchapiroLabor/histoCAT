@@ -42,6 +42,7 @@ put('gates', []);
 put('allids',[]);
 put('Tiff_name',[]);
 put('Tiff_all',[]);
+put('CellIDs_by_CellProfiler',[]);
  
 %Save the sessionData matrix, the gates and the rest of the necessary
 %information to continue the session
@@ -56,7 +57,15 @@ put('Tiff_all',read_session.Tiff_all);
 %If a pixel expansion has been set in the GUI of the saved session, save it in
 %variable
 try
-    expansionfeature=read_session.expansionfeature;
+    expansionfeature_value=read_session.expansionfeature_value;
+    expansionfeature_string=read_session.expansionfeature_range;
+catch
+    expansionfeature_value=[];
+    expansionfeature_string = [];
+end
+
+try
+    expansionfeature = read_session.expansionfeature;
 catch
     expansionfeature=[];
 end
@@ -86,10 +95,12 @@ set(handles.list_channels,'Max',1000,'Min',2);
 %Update pixelexpansion drop down only if value has been set in session to
 %be loaded
 if ~isempty(expansionfeature)
-    set(handles.pixelexpansion_dropdown,'Value',str2double(expansionfeature)+1);
-    if isnan(handles.pixelexpansion_dropdown.Value)
-        set(handles.pixelexpansion_dropdown,'Value',1);
-    end
+    set(handles.pixelexpansion_dropdown,'String',expansionfeature);
+    set(handles.pixelexpansion_dropdown,'Value',1);
+    Pixelexpansion_callback;
+elseif ~isempty(expansionfeature_value)
+    set(handles.pixelexpansion_dropdown,'String',expansionfeature_string);
+    set(handles.pixelexpansion_dropdown,'Value',expansionfeature_value);
     Pixelexpansion_callback;
 end
  

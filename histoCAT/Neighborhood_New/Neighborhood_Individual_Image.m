@@ -1,5 +1,5 @@
-function [pValue_higher,pValue_lower,real_data_mean,combos_all,Phenograph_index] = Neighborhood_Individual_Image(permutations,...
-    selectedall_gates,gates,sessionData,image_num,expansion_name,Phenograph_index_selected)
+function [pValue_higher,pValue_lower,real_data_mean,combos_all] = Neighborhood_Individual_Image(permutations,...
+    selectedall_gates,gates,sessionData,image_num,expansion_name,Phenograph_index_selected,patch_det)
 % NEIGHBORHOOD_INDIVIDUAL_IMAGE Calculates the pValues for left/right tailed permutation test
 % 
 % Input:
@@ -24,15 +24,15 @@ set(gca,'TickLabelInterpreter','none')
 % Get neighbor index for each image
 neigb_index = cellfun(@(x) find(~cellfun('isempty',regexp(x,expansion_name))),...
     gates(selectedall_gates,3),'UniformOutput',false);
-% Get phenograph index for each image
-Phenograph_index = cellfun(@(x) find(~cellfun('isempty',regexp(x,'Phenograph'))),...
-    gates(selectedall_gates,3),'UniformOutput',false);
+% % Get phenograph index for each image
+% Phenograph_index = cellfun(@(x) find(~cellfun('isempty',regexp(x,'Phenograph'))),...
+%     gates(selectedall_gates,3),'UniformOutput',false);
 
 % Generate a matrix for only CellID, Neighbors and Phenograph
 % We added +1 to use the index also for cells which have zero neighbors
 Neighbor_Matrix = sessionData(gates{selectedall_gates(image_num),2},[neigb_index{image_num,1}]);
 Neighbor_Matrix_index = Neighbor_Matrix+1;
-Phenograph_Vector = sessionData(gates{image_num,2},[Phenograph_index_selected{image_num,1}]);
+Phenograph_Vector = sessionData(gates{image_num,2},Phenograph_index_selected{image_num});
 Phenograph_Vector_index =[0;Phenograph_Vector];
 
 % Replace all neighbors with corresponding cell type
@@ -48,7 +48,7 @@ combos_all_histcount = [combos_all,zeros(size(combos_all,1),1)];
 
 % Run through all combos_all_histcount
 [combos_all_histcount_real] = Calculate_STDandMean(combos_all,Phenograph_Neighor_Matrix,...
-    Phenograph_Vector,Neighbor_Matrix);
+    Phenograph_Vector,Neighbor_Matrix,patch_det);
 
 for p=1:permutations
     combos_all_histcount_Perm_single = [];Phenograph_Vector_perm = [];
@@ -60,7 +60,7 @@ for p=1:permutations
     Phenograph_Neighor_Matrix_perm = Phenograph_Vector_index_perm(Neighbor_Matrix_index);
     % Run through all combos_all_histcount
     [combos_all_histcount_Perm_single] = Calculate_STDandMean(combos_all,Phenograph_Neighor_Matrix_perm,...
-        Phenograph_Vector_perm,Neighbor_Matrix);
+        Phenograph_Vector_perm,Neighbor_Matrix,patch_det);
     combos_all_histcount_Perm(:,p+2) = combos_all_histcount_Perm_single(:,3);
 end
 

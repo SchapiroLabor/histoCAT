@@ -1,4 +1,4 @@
-function [ Fcs_Interest_all,length_neighbr,sizes_neighbrs ] = NeighbrCells_histoCATsinglecells( rownum,allvarnames,expansionfeature,Current_channels,Current_Mask,...
+function [ Fcs_Interest_all,length_neighbr,sizes_neighbrs ] = NeighbrCells_histoCATsinglecells( rownum,allvarnames,expansion,Current_channels,Current_Mask,...
     Current_singlecellinfo,Fcs_Interest_all,length_neighbr,sizes_neighbrs,HashID,k )
 % NEIGHBRCELLS_HISTOCATSINGLECELLS: This function finds the neighboring cells and 
 % updates all neighbor ID's to the Fcs_interest_all table and the
@@ -11,7 +11,7 @@ function [ Fcs_Interest_all,length_neighbr,sizes_neighbrs ] = NeighbrCells_histo
 % Input variables:
 % rownum --> loop for each images individual
 % allvarnames --> all variable names for this particular image
-% expansionfeature --> how many pixels to expand cells for defining neighborhood
+% expansion --> how many pixels to expand cells for defining neighborhood
 % Current_channels --> current channel names without neighbors, incl. basic
 % features from region props
 % Current_Mask --> mask of current image
@@ -45,44 +45,42 @@ neighbr_cells          = {};
 numbr_of_neighbors     = [];
 imid_cellid = [];
 
-%Looping through all the cells in an Image Mask to get percent touching and
-%number neighbors
-for CellId = len'
+expansion_single = str2double(expansion(1));
+expansion_range = str2num(cell2mat(expansion(2)));
 
-    %Coordinates of each CellId
-    [r,c] = ind2sub([sr sc],props(CellId).PixelIdxList);
+%This first part is for percent touching and number neighbor calculation on
+%a fixed pixel expansion
+CellId = len';
+%Get coordinates of each CellId
+[r,c] = cellfun(@(x) ind2sub([sr sc],x),{props(CellId).PixelIdxList},'UniformOutput', false);
+%The below conditions check the min and max conditions for each.Do NOT CHANGE
+rmax = cellfun(@(x) min(sr,max(x) + (expansion_single)), r);
+rmin = cellfun(@(x) max(1,min(x)  - (expansion_single)),r);
+cmax = cellfun(@(x) min(sc,max(x) + (expansion_single)),c);
+cmin = cellfun(@(x) max(1,min(x)  - (expansion_single)),c);
+se = strel('disk', expansion_single);
+idxr = cellfun(@(x,y) x:y, num2cell(rmin),num2cell(rmax),'UniformOutput',false);
+idxc = cellfun(@(x,y) x:y, num2cell(cmin),num2cell(cmax),'UniformOutput',false);
+patch = cellfun(@(x,y) Current_Mask(x,y),idxr,idxc,'UniformOutput',false);
+%Find boundary pixel of current cell (CellProfiler)
+BoundaryPixels = cellfun(@(x,y) bwperim(x == y, 8),patch,num2cell(CellId),'UniformOutput',false);
+%Remove the current cell, and dilate the other objects (CellProfiler)
+OtherCellsMask = cellfun(@(x,y) imdilate((x > 0) & (x ~= y), se, 'same'),patch,num2cell(CellId),'UniformOutput',false);
+PercentTouching = cellfun(@(x,y) sum(x(y)) / sum(y(:)),OtherCellsMask,BoundaryPixels,'UniformOutput',false);
+%Extend cell to find neighbors
+extended = cellfun(@(x,y) imdilate(x==y,se,'same'),patch,num2cell(CellId),'UniformOutput',false);
+overlap = cellfun(@(x,y) x(y),patch,extended,'UniformOutput',false);
+neighbr_cells = cellfun(@(x,y) setdiff(unique(x(:)),[0,y]),overlap,num2cell(CellId),'UniformOutput',false);
+numbr_of_neighbors =cellfun(@(x) length(x),neighbr_cells,'UniformOutput',false);
+%Store HashID as the imageID (first column)
+imid_cellid   = cellfun(@(x) [hex2dec(HashID{rownum}) x],num2cell(CellId),'UniformOutput',false);
 
-    %The below conditions check the min and max conditions for each.Do NOT CHANGE
-    rmax = min(sr,max(r) + (expansionfeature));
-    rmin = max(1,min(r)  - (expansionfeature));
-    cmax = min(sc,max(c) + (expansionfeature));
-    cmin = max(1,min(c)  - (expansionfeature));
-
-    %Get percent tounching starting with the patch (CellProfiler)
-    patch = Current_Mask(rmin:rmax,cmin:cmax);
-    %Find boundary pixel of current cell (CellProfiler)
-    se = strel('disk', expansionfeature);
-    BoundaryPixels = bwperim(patch == CellId, 8);
-    %Remove the current cell, and dilate the other objects (CellProfiler)
-    OtherCellsMask = imdilate((patch > 0) & (patch ~= CellId), se, 'same');
-    PercentTouching(CellId) = sum(OtherCellsMask(BoundaryPixels)) / sum(BoundaryPixels(:));
-
-    %Extend cell to find neighbors
-    extended = imdilate(patch==CellId,se,'same');
-    overlap = patch(extended);
-    neighbr_cells{CellId} = setdiff(unique(overlap(:)),[0,CellId]);
-    numbr_of_neighbors(CellId,:) = length(neighbr_cells{CellId});
-
-    %Store HashID as the imageID (first column)
-    imid_cellid   = [imid_cellid;[hex2dec(HashID{rownum}) CellId]];
-    
-end %Finished all CellIds
 
 %Initializing waitbar
 hWaitbar = waitbar(0,['Updating Single Cell Information for Image', num2str(k)]);
 
-%Run through each variant of pixelexpansion and get neighboring cells
-for expansionNeighbrs=1:6
+%Second part run through each variant of pixelexpansion and get neighboring cells
+for expansionNeighbrs=expansion_range
 
     CellId = len';
     
@@ -118,13 +116,13 @@ close(hWaitbar);
 
 %Add Neighbour CellIds as a table
 [length_neighbr(rownum),sizes_neighbrs(rownum)] = size(neighbour_CellId_table_all);
-temp_tableimidcellid = array2table(imid_cellid,'VariableNames',{'ImageId','CellId'});
+temp_tableimidcellid = array2table(cell2mat(imid_cellid'),'VariableNames',{'ImageId','CellId'});
 
 %Add percent touching as table
-temp_table_percenttouch = array2table(PercentTouching','VariableNames',{'Percent_Touching'});
+temp_table_percenttouch = array2table(cell2mat(PercentTouching'),'VariableNames',{'Percent_Touching'});
 
 %Add number of neighbors as table
-temp_table_NumberNeighbors = array2table(numbr_of_neighbors,'VariableNames',{'Number_Neighbors'});
+temp_table_NumberNeighbors = array2table(cell2mat(numbr_of_neighbors'),'VariableNames',{'Number_Neighbors'});
 [~,idx_cur] = ismember(Current_channels,allvarnames);
 cur_cells = zeros(size(Current_singlecellinfo,1),numel(allvarnames));
 cur_cells(:,idx_cur) = Current_singlecellinfo;

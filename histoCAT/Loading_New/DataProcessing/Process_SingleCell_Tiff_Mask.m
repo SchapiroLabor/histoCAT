@@ -25,10 +25,14 @@ function [Fcs_Interest_all] = Process_SingleCell_Tiff_Mask(Tiff_all,Tiff_name,Ma
 
 %If session was loaded for the first time, ask for the pixelexpansion to
 %use in order to search for neighboring cells
-if exist('expansionfeature') == 0
-    expansioninput = inputdlg('Please specify the number of pixels(eg:between 1 to 6) you want to expand per cell the search area for finding neighbors','Storing neighboring cell information',1,{'4'});
-    expansionfeature = str2double(expansioninput{1});
-    put('expansionfeature',expansionfeature);
+if exist('expansionfeature','var') == 0
+    prompt = {'Enter a single pixel expansion to use for calculation of number of neighbors:','Enter a single/range of pixelexpansions to detect neighbors (e.g for range 4:6)'};
+    dlg_title = 'Pixel expansion';
+    num_lines = 1;
+    defaultans = {'4','4'};
+    expansion = inputdlg(prompt,dlg_title,num_lines,defaultans);
+    put('expansionfeature',expansion(1));
+    put('expansion_range',str2num(cell2mat(expansion(2))));
 end
 %Else expansionfeature has already been set
 
@@ -43,7 +47,9 @@ allvarnames_nospatial = unique([cell_name{idx_cel}],'stable');
 BasicFeatures = {'Area', 'Eccentricity', 'Solidity', 'Extent', ...
     'EulerNumber', 'Perimeter',...
     'MajorAxisLength', 'MinorAxisLength', 'Orientation'};
-allvarnames = [allvarnames_nospatial, BasicFeatures];
+%Add X and Y
+XY = {'X_position','Y_position'};
+allvarnames = [allvarnames_nospatial, BasicFeatures,XY];
 
 %Ask user whether to use arcsinh transform or not
 arcsinh_boolean = inputdlg('Do you want to arcsinh tranform the data? If yes, please specify a suitable cofactor (5 is often used).','arcsinh',1,{'Do not transform data'});
@@ -76,6 +82,8 @@ for k=1:size(masks,2)
             
             %Get spatial features similar to CellProfiler
             props_spatial = regionprops(Current_Mask, BasicFeatures(~strcmp(BasicFeatures,'FormFactor')));
+            %Add X and Y coordinates to output
+            props_spatial_XY = regionprops(Current_Mask, 'Centroid');
             
             %Transform single cell data by arcsinh if selected by user
             if isempty(arcsinh_boolean)
@@ -84,11 +92,49 @@ for k=1:size(masks,2)
                 Current_singlecellinfo_nospatial = asinh(mean_tab ./ arcsinh_boolean{1});
             end
             
+            %If RNA channels with spot detection masks are in the sample,
+            %replace the mean with the amount of spots per cell
+            spot_masks = retr('spot_masks');
+            if ~isempty(spot_masks)
+                idx_RNA = ~cellfun(@isempty, spot_masks(rownum,:));
+                amount_RNAchannels = sum(idx_RNA);
+                if amount_RNAchannels > 0
+                    for rna = 1:amount_RNAchannels
+                        spotMasks = spot_masks(rownum,idx_RNA);
+                        currspotMask = spotMasks{rna};
+                        get_spots = regionprops(Current_Mask, currspotMask, 'PixelValues');
+                        spots_cell = struct2cell(get_spots);
+                        unSpots = cellfun(@unique, spots_cell,'UniformOutput',false);
+                        notzero = cellfun(@(x) x~=0, unSpots,'UniformOutput',false);
+                        amount_spots = cellfun(@(x,y) length(x(y)), unSpots,notzero,'UniformOutput',false);
+                        curridx = find(idx_RNA);
+                        curridx = curridx(rna);
+                        Current_singlecellinfo_nospatial(:,curridx) = cell2mat(amount_spots)';
+                    end
+                    
+                    
+                    %For the 'Abs_count' IMC channels, replace means with
+                    %raw count
+                    IMC_channels = ~cellfun(@isempty, strfind(allvarnames_nospatial,'Abs_counts'));
+                    IMC_chandat = chandat(IMC_channels);
+                    get_count = @(chan) struct2cell(regionprops(Current_Mask,IMC_chandat{chan}, 'PixelValues'));
+                    count_tab = arrayfun(get_count,1:length(IMC_chandat), 'UniformOutput',0)';
+                    sum_tab = {};
+                    for c=1:length(count_tab)
+                        curr_count_tab = count_tab{c};
+                        curr_sum = cellfun(@(x) sum(x), curr_count_tab);
+                        sum_tab{c} = curr_sum';
+                    end
+                    Current_singlecellinfo_nospatial(:,IMC_channels) = cell2mat(sum_tab);
+                    
+                end
+            end
+            
             %Add spatial information to data matrix: variable names and
             %data
             Current_channels_nospatial = cell_name{k};
-            Current_channels = [Current_channels_nospatial, BasicFeatures];
-
+            Current_channels = [Current_channels_nospatial, BasicFeatures,XY];
+            
             BasicFeatures_Matrix = [cat(1,props_spatial.Area),...
                 cat(1,props_spatial.Eccentricity),...
                 cat(1,props_spatial.Solidity),...
@@ -97,14 +143,16 @@ for k=1:size(masks,2)
                 cat(1,props_spatial.Perimeter),...
                 cat(1,props_spatial.MajorAxisLength),...
                 cat(1,props_spatial.MinorAxisLength),...
-                cat(1,props_spatial.Orientation)]; 
+                cat(1,props_spatial.Orientation),...
+                cat(1,props_spatial_XY.Centroid)];
+            
             Current_singlecellinfo= [Current_singlecellinfo_nospatial, BasicFeatures_Matrix];
-              
+            
             %Function call to expand cells and get the neighbrcellIds
-            [ Fcs_Interest_all,length_neighbr,sizes_neighbrs ] = NeighbrCells_histoCATsinglecells( rownum,allvarnames,expansionfeature,Current_channels,Current_Mask,Current_singlecellinfo,...
+            [ Fcs_Interest_all,length_neighbr,sizes_neighbrs ] = NeighbrCells_histoCATsinglecells( rownum,allvarnames,expansion,Current_channels,Current_Mask,Current_singlecellinfo,...
                 Fcs_Interest_all,length_neighbr,sizes_neighbrs,HashID,k );
-           
-        %If single cell information is already present for image    
+            
+            %If single cell information is already present for image
         else
             disp(['Single Cell Information  is already present for ImageId ',int2str(rownum)]);
             neighb_index = find(~(cellfun('isempty',strfind(Fcs_Interest_all{rownum,1}.Properties.VariableNames,'neig'))));
@@ -113,11 +161,11 @@ for k=1:size(masks,2)
             continue;
         end
         
-    %If there is no mask no single cell information can be extracted
+        %If there is no mask no single cell information can be extracted
     else
-        Fcs_Interest_all{rownum,1} = [];  
+        Fcs_Interest_all{rownum,1} = [];
     end
-
+    
 end
 
 end

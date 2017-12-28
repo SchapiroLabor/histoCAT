@@ -21,7 +21,7 @@ if percent == 0
 else
     
     %Get value of percentile corresponding to given cut-off
-    percentile = prctile(vColor, 100-percent);
+    percentile = prctile(vColor, percent);
     
     %Find values above given percentile and set them down to value of
     %percentile

@@ -25,7 +25,7 @@ select_gates_cut = 1:size(gates_cut,1);
 
 % User input for neighborhood analysis
 pixelexpansion_dropdown = retr('pixelexpansion');
-answers = inputdlg({'Amount of permutations:','Significance cut-off: (min. 1/amount of permutations)','Special cluster (Individual Output)','Extra information (Legend for Individual Output)','Specify the amount of pixel expansion to look for cell neighbors:','Percentage cut-off for present interactions (0-1)'},'Neighborhood Analysis',1,{'999','0.05','7','Grade1',pixelexpansion_dropdown,'0.1'});
+answers = inputdlg({'Amount of permutations:','Significance cut-off: (min. 1/amount of permutations)','Special cluster (Individual Output)','Extra information (Legend for Individual Output)','Specify the amount of pixel expansion to look for cell neighbors:','Percentage cut-off for present interactions (0-1)','If you want to run patch detection: enter minimum amount of neighbors the patch has to include'},'Neighborhood Analysis',1,{'999','0.05','7','Grade1',pixelexpansion_dropdown,'0.1','\'});
 
 % Extract user input
 % Amount permutations
@@ -47,19 +47,31 @@ Pixel_expansion = str2double(Pixel_expansion);
 % (0-1) --> Example 0.1 --> 10% of all images include the cluster
 cut_off_percent = answers(6);
 cut_off_percent = str2double(cut_off_percent);
+%Patch detection
+patch_det = answers(7);
+if strcmp(patch_det,'\')
+    patch_det = 0;
+else
+    %Minus one because it is later used as the number the interactions have
+    %to be higher than, so if user enters 1 -> it will be 0 and hence the
+    %regular neighborhood analysis, if user enters 2 -> the interaction has
+    %to be with more than 1 neighbor
+    patch_det = str2double(patch_det)-1;
+end
+
 
 % If batch mode - each pixel expansion can be tested
 if isnan(Pixel_expansion)
     
     for pixel = 1:6
         Neighborhood_Master(perm,pixel,alpha,gates_cut,select_gates_cut,...
-            sessionData,custom_gatesfolder,Special_clusters_name,Extra_information,cut_off_percent);
+            sessionData,custom_gatesfolder,Special_clusters_name,Extra_information,cut_off_percent,patch_det);
         disp('Done')
         disp(pixel)
     end
 else
     Neighborhood_Master(perm,Pixel_expansion,alpha,gates_cut,select_gates_cut,...
-        sessionData,custom_gatesfolder,Special_clusters_name,Extra_information,cut_off_percent);
+        sessionData,custom_gatesfolder,Special_clusters_name,Extra_information,cut_off_percent,patch_det);
     disp('Done')
     disp(Pixel_expansion)
 end

@@ -23,7 +23,7 @@ set(sliderContainer,'Units','normalized','position',[0.7616236162361624,0.025899
 if ~(isempty(currentsliderValue_tSNE) == 1)
     set(sliderJava, 'Value',currentsliderValue_tSNE, 'Orientation',sliderJava.HORIZONTAL,'MinorTickSpacing',2.5,'MajorTickSpacing',10, 'PaintLabels',true,'PaintTicks',true);
 else
-    set(sliderJava, 'Value',0, 'Orientation',sliderJava.HORIZONTAL,'MinorTickSpacing',2.5,'MajorTickSpacing',10, 'PaintLabels',true,'PaintTicks',true);
+    set(sliderJava, 'Value',100, 'Orientation',sliderJava.HORIZONTAL,'MinorTickSpacing',2.5,'MajorTickSpacing',10, 'PaintLabels',true,'PaintTicks',true);
 end
 
 %Set min and max values, labels and make visible

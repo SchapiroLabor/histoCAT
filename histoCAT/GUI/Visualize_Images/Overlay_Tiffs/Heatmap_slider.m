@@ -30,7 +30,7 @@ set(sliderContainer,'Units','normalized','position',[0.2206642066420664,0.020143
 if ~(isempty(currentsliderValue) == 1)
     set(sliderJava, 'Value',currentsliderValue, 'Orientation',sliderJava.HORIZONTAL,'MinorTickSpacing',2.5,'MajorTickSpacing',10, 'PaintLabels',true,'PaintTicks',true);
 else
-    set(sliderJava, 'Value',0, 'Orientation',sliderJava.HORIZONTAL,'MinorTickSpacing',2.5,'MajorTickSpacing',10, 'PaintLabels',true,'PaintTicks',true);
+    set(sliderJava, 'Value',100, 'Orientation',sliderJava.HORIZONTAL,'MinorTickSpacing',2.5,'MajorTickSpacing',10, 'PaintLabels',true,'PaintTicks',true);
 end
 
 sliderJava.setMinimum(0)
