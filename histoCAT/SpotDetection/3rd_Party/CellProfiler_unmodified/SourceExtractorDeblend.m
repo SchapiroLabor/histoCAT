@@ -112,8 +112,13 @@ fprintf('%s: Deblending Images, please wait. ',mfilename)
 tic
 %go via all images
 for i = 1:length(structSegCC)
-    
-    tempImage = structSegCC{i};
+    % If only "1" is used as deblending step, no cell array exist
+    if max(size(structSegCC))==1
+        tempImage = structSegCC;
+    else
+        % If numbers higher than "1" were used, cell array exist
+        tempImage = structSegCC{i};
+    end
     
     %Calculate centroids of the temporary image
     %propsCentroid = cellAllCentroid{i};
