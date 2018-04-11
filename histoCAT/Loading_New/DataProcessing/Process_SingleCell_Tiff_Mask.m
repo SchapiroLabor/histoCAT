@@ -116,17 +116,20 @@ for k=1:size(masks,2)
                     %For the 'Abs_count' IMC channels, replace means with
                     %raw count
                     IMC_channels = ~cellfun(@isempty, strfind(allvarnames_nospatial,'Abs_counts'));
-                    IMC_chandat = chandat(IMC_channels);
-                    get_count = @(chan) struct2cell(regionprops(Current_Mask,IMC_chandat{chan}, 'PixelValues'));
-                    count_tab = arrayfun(get_count,1:length(IMC_chandat), 'UniformOutput',0)';
-                    sum_tab = {};
-                    for c=1:length(count_tab)
-                        curr_count_tab = count_tab{c};
-                        curr_sum = cellfun(@(x) sum(x), curr_count_tab);
-                        sum_tab{c} = curr_sum';
+                    % If not present, skip this step
+                    if any(IMC_channels)==1
+                        % If IMC 'Abs_count' is present
+                        IMC_chandat = chandat(IMC_channels);
+                        get_count = @(chan) struct2cell(regionprops(Current_Mask,IMC_chandat{chan}, 'PixelValues'));
+                        count_tab = arrayfun(get_count,1:length(IMC_chandat), 'UniformOutput',0)';
+                        sum_tab = {};
+                        for c=1:length(count_tab)
+                            curr_count_tab = count_tab{c};
+                            curr_sum = cellfun(@(x) sum(x), curr_count_tab);
+                            sum_tab{c} = curr_sum';
+                        end
+                        Current_singlecellinfo_nospatial(:,IMC_channels) = cell2mat(sum_tab);
                     end
-                    Current_singlecellinfo_nospatial(:,IMC_channels) = cell2mat(sum_tab);
-                    
                 end
             end
             
