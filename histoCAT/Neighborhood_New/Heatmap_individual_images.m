@@ -96,54 +96,61 @@ Matrix_Delta_cut_noNaN = Matrix_Delta_cut;
 % For clustergram replace NaN's with zeros
 Matrix_Delta_cut_noNaN(isnan(Matrix_Delta_cut_noNaN)) = 0;
 
-% Clustergram for all images
-Delta = clustergram(Matrix_Delta_cut_noNaN,'RowLabels',gates(selectedall_gates',1)...
-    ,'ColumnLabels',Unique_all_string_names_cut,...
-    'Cluster','all','linkage','ward','Colormap',redbluecmap); addTitle...
-    (Delta,['Deltaclustergram for all images with Pixel',...
-    num2str(pixelexpansion),'_Perm_',num2str(permutations),'_',pheno_name,'_',Extra_information]);
-plot_delta =plot(Delta);
-
-% Save clustergram for all images
-saveas(plot_delta,fullfile(custom_gatesfolder,['Clustergram_all_Pixel',num2str(pixelexpansion),'_PatchDetection',num2str(patch_det),...
-    '_Perm_',num2str(permutations),'_',pheno_name,'_',Extra_information,'significance_cutoff',num2str(pVal_sig),'.fig']));
-
-% Search for special cases
-Special_clusters = [];
-Special_clusters = find(~cellfun(@isempty,regexp(Unique_all_string_names,Special_clusters_name,'match')));
-Special_cluster= Matrix_Delta(:,Special_clusters);
-
-% Show heatmap 
-for j=1:size(Special_cluster,2)
-    if length(unique(Special_cluster(:,j)))==1 && unique(Special_cluster(:,j)) == 0
-        Special_cluster_cut(j)=0;
-    else
-        Special_cluster_cut(j)=1;
+% Generate only if more than 1 image selected for neighborhood analysis
+if size(Matrix_Delta_cut_noNaN,1) == 1
+    msgbox('No clustergram since only one image selected');
+    return
+else
+    % Clustergram for all images
+    Delta = clustergram(Matrix_Delta_cut_noNaN,'RowLabels',gates(selectedall_gates',1)...
+        ,'ColumnLabels',Unique_all_string_names_cut,...
+        'Cluster','all','linkage','ward','Colormap',redbluecmap); addTitle...
+        (Delta,['Deltaclustergram for all images with Pixel',...
+        num2str(pixelexpansion),'_Perm_',num2str(permutations),'_',pheno_name,'_',Extra_information]);
+    plot_delta =plot(Delta);
+    
+    % Save clustergram for all images
+    saveas(plot_delta,fullfile(custom_gatesfolder,['Clustergram_all_Pixel',num2str(pixelexpansion),'_PatchDetection',num2str(patch_det),...
+        '_Perm_',num2str(permutations),'_',pheno_name,'_',Extra_information,'significance_cutoff',num2str(pVal_sig),'.fig']));
+    
+    
+    % Search for special cases
+    Special_clusters = [];
+    Special_clusters = find(~cellfun(@isempty,regexp(Unique_all_string_names,Special_clusters_name,'match')));
+    Special_cluster= Matrix_Delta(:,Special_clusters);
+    
+    % Show heatmap
+    for j=1:size(Special_cluster,2)
+        if length(unique(Special_cluster(:,j)))==1 && unique(Special_cluster(:,j)) == 0
+            Special_cluster_cut(j)=0;
+        else
+            Special_cluster_cut(j)=1;
+        end
+    end
+    
+    Matrix_cut_special= Special_cluster(:,logical(Special_cluster_cut));
+    Matrix_cut_special_noNaN = Matrix_cut_special;
+    Matrix_cut_special_noNaN(isnan(Matrix_cut_special_noNaN)) = 0;
+    
+    % Adapt column labels
+    Special_for_columnlabel = Unique_all_string_names(Special_clusters,:);
+    Special_for_columnlabel_cut = Special_for_columnlabel(logical(Special_cluster_cut));
+    
+    % Clustergram for special output
+    higher_special = clustergram(Matrix_cut_special_noNaN,'RowLabels',gates(selectedall_gates,1),'ColumnLabels',Special_for_columnlabel_cut,...
+        'Cluster','all','linkage','ward','Colormap',redbluecmap); addTitle(higher_special,['Delta_Special_Pixel',num2str(pixelexpansion),'_Perm_',permutations,'_',pheno_name,'_',Special_clusters_name,'_',Extra_information]);
+    plot_delta_special =plot(higher_special);
+    
+    % Save special output clustergram
+    saveas(plot_delta_special,fullfile(custom_gatesfolder,['Clustergram_special_Pixel',num2str(pixelexpansion),'_PatchDetection',num2str(patch_det),'_Perm_',num2str(permutations),'_',pheno_name,'_SpecialCluster',Special_clusters_name,'_',Extra_information,'significance_cutoff',num2str(pVal_sig),'.fig']));
+    
+    
+    % User input: Do you want to save an interactive clustergram into the
+    % customs folder?
+    save_data_forInteractive = questdlg('Would you like to save the data to rebuild the interactive clustergram?','Interactive clustergram');
+    if strcmp(save_data_forInteractive,'Yes')
+        save(fullfile(custom_gatesfolder,['Data_for_interactive_clustergram_','pixelexpansion',num2str(pixelexpansion),'_PatchDetection',num2str(patch_det),'_Perm',num2str(permutations),'_',pheno_name,'_',Extra_information,'significance_cutoff',num2str(pVal_sig),'.mat']))
     end
 end
-
-Matrix_cut_special= Special_cluster(:,logical(Special_cluster_cut));
-Matrix_cut_special_noNaN = Matrix_cut_special;
-Matrix_cut_special_noNaN(isnan(Matrix_cut_special_noNaN)) = 0;
-
-% Adapt column labels
-Special_for_columnlabel = Unique_all_string_names(Special_clusters,:);
-Special_for_columnlabel_cut = Special_for_columnlabel(logical(Special_cluster_cut));
-
-% Clustergram for special output
-higher_special = clustergram(Matrix_cut_special_noNaN,'RowLabels',gates(selectedall_gates,1),'ColumnLabels',Special_for_columnlabel_cut,...
-    'Cluster','all','linkage','ward','Colormap',redbluecmap); addTitle(higher_special,['Delta_Special_Pixel',num2str(pixelexpansion),'_Perm_',permutations,'_',pheno_name,'_',Special_clusters_name,'_',Extra_information]);
-plot_delta_special =plot(higher_special);
-
-% Save special output clustergram
-saveas(plot_delta_special,fullfile(custom_gatesfolder,['Clustergram_special_Pixel',num2str(pixelexpansion),'_PatchDetection',num2str(patch_det),'_Perm_',num2str(permutations),'_',pheno_name,'_SpecialCluster',Special_clusters_name,'_',Extra_information,'significance_cutoff',num2str(pVal_sig),'.fig']));
-
-% User input: Do you want to save an interactive clustergram into the
-% customs folder?
-save_data_forInteractive = questdlg('Would you like to save the data to rebuild the interactive clustergram?','Interactive clustergram');
-if strcmp(save_data_forInteractive,'Yes')
-    save(fullfile(custom_gatesfolder,['Data_for_interactive_clustergram_','pixelexpansion',num2str(pixelexpansion),'_PatchDetection',num2str(patch_det),'_Perm',num2str(permutations),'_',pheno_name,'_',Extra_information,'significance_cutoff',num2str(pVal_sig),'.mat']))
-end
-
 end
 
