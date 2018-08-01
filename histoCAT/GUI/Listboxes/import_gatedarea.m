@@ -34,9 +34,19 @@ put('currentfolder_gated', [path filesep]);
 if strcmp(ext,'.fcs') == 1
     
     %Read fcs-files
-    [fcsdats,fcshdrs]=cellfun(@fca_readfcs_J, files, 'UniformOutput', false);
+    [fcsdats_raw,fcshdrs_raw]=cellfun(@fca_readfcs_J, files, 'UniformOutput', false);
     disp(sprintf('File loaded: %gs',toc));
-
+    
+    %Include amount of cells present in the fcs file into the matrix
+    fcsdats = fcsdats_raw;
+    fcsdats{:}(:,end+1) = size(fcsdats_raw{:},1);
+    
+    %Include name for amount of cell present in the fcs file
+    fcshdrs = fcshdrs_raw;
+    fcshdrs{1,1}.NumOfPar = size(fcsdats_raw{:},1);
+    fcshdrs{1,1}.par(end+1).name = 'Amount_cells_in_sample';  
+    fcshdrs{1,1}.par(end).name2 = 'Amount_cells_in_sample';
+    
     %Start timing
     tic
     
