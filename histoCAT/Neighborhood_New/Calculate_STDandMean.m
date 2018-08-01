@@ -33,8 +33,8 @@ for i=1:size(combos_all,1)
     eachCount = sum(eachLogic,2);
     atLeastX = eachCount > patch_det;
     
-    [Ncount,~] = histc(row_cluster_matrix, Get_unique_rows(atLeastX)); % this will give the number of occurences of each unique element  
-    Ncount_zero = [Ncount;zeros(size(Neighbor_Matrix,1)-size(Intersect_combos_all,1),1)];
+    %[Ncount,~] = histc(row_cluster_matrix, Get_unique_rows(atLeastX)); % this will give the number of occurences of each unique element  
+    Ncount_zero = [eachCount(atLeastX);zeros(size(Neighbor_Matrix,1)-size(Intersect_combos_all,1),1)];
     % Save in matrix
     combos_all_histcount(i,3) = mean(Ncount_zero);
 end
