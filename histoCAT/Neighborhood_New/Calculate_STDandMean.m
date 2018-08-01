@@ -27,16 +27,25 @@ for i=1:size(combos_all,1)
     % Get the histocount
     Get_unique_rows = unique(Intersect_combos_all);
     
-    %For patch detection
-    intersectNeighbours = Phenograph_Neighor_Matrix(Intersect_combos_all,:);
-    eachLogic = ismember(intersectNeighbours, combos_all(i,1));
-    eachCount = sum(eachLogic,2);
-    atLeastX = eachCount > patch_det;
-    
-    [Ncount,~] = histc(row_cluster_matrix, Get_unique_rows(atLeastX)); % this will give the number of occurences of each unique element  
-    Ncount_zero = [Ncount;zeros(size(Neighbor_Matrix,1)-size(Intersect_combos_all,1),1)];
-    % Save in matrix
-    combos_all_histcount(i,3) = mean(Ncount_zero);
+    % Include interaction information
+    combos_all_histcount(i,1:2) = combos_all(i,1:2);
+    % Check if empty
+    if isempty(Get_unique_rows)==1
+        combos_all_histcount(i,3) = 0;
+    else
+        
+        %For patch detection
+        intersectNeighbours = Phenograph_Neighor_Matrix(Intersect_combos_all,:);
+        eachLogic = ismember(intersectNeighbours, combos_all(i,1));
+        eachCount = sum(eachLogic,2);
+        atLeastX = eachCount > patch_det;
+        
+        % Count all interactions divided by the amount of interacting cells
+        combos_all_histcount(i,3) = sum(eachCount)/length(Intersect_combos_all);
+        if isnan(combos_all_histcount(i,3))
+            combos_all_histcount(i,3) = 0;
+        end
+    end
 end
 
 end
