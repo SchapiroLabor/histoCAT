@@ -24,8 +24,8 @@ set(gca,'TickLabelInterpreter','none')
 
 % Calculate sum or mean of all present clusters using the significants
 % output. -1 should be transformed to NaN
-Matrix_high(Matrix_high == -1) = NaN
-Matrix_low(Matrix_low == -1) = NaN
+Matrix_high(Matrix_high == -1) = NaN;
+Matrix_low(Matrix_low == -1) = NaN;
 
 % Exclude clusters which are only present in a few images
 % We are using (cut-off) images at least
