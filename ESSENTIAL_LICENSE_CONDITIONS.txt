@@ -1,15 +1,20 @@
-To be acknowledged by users (boxes):
+HistoCAT offers a dual licensing model. 
 
-(x) YOU ACKNOWLEDGE THAT YOU HAVE READ THE LICENSE AGREEMENT, UNDERSTAND IT AND AGREE TO BE BOUND BY ITS TERMS AND CONDITIONS. 
+You can redistribute HistoCAT and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version. 
 
-It is important that you read the entirety of and understand the License Agreement. There are, however, a few key points that we need to emphasise:
+The GNU Affero General Public License is designed to ensure that if a modified version is distributed or made accessible on a server (e.g. in a SaaS offering), the modified source code becomes available to the community. 
 
-(x) NO WARRANTY: The Software is provided "as is" and any express or implied warranties are disclaimed
+If you wish to use HistoCAT under alternate terms, you may obtain a commercial license to HistoCAT. Contact us for more information:
 
-(x) NON-COMMERCIAL USE: The license granted is for internal, non-commercial research by academic institutions only. Any use of the SOFTWARE for commercial research or to manufacture or sell products or technologies (or portions thereof) either directly or indirectly for any direct or indirect for-profit purposes is strictly prohibited.
+Prof. Bernd Bodenmiller
+bernd.bodenmiller@imls.uzh.ch
+Institute of Molecular Life Sciences
+University of Zurich
+Winterthurerstrasse 190
+CH-8057 Zurich
+Switzerland
 
-(x) NO DISTRIBUTION: You are not allowed to sublicense or distribute the SOFTWARE in whole or in part to any third party
 
-(x) CITATION: You agree to reference the publication “histoCAT: analysis of cell phenotypes and interactions in multiplex image cytometry data.”1 and acknowledge University of Zurich as the source of the SOFTWARE in any publications reporting use of it or any manual or document. A copy of all reports and papers that are for public or general release that use the SOFTWARE must be forwarded immediately upon release or publication to the SOFTWARE Principal Investigator.
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more details. 
 
-1 Schapiro, D. and Jackson HW et al. histoCAT: analysis of cell phenotypes and interactions in multiplex image cytometry data. Nature Methods, August 2017, doi:10.1038/nmeth.4391.
+You should have received a copy of the GNU Affero General Public License along with this program. If not, see <https://www.gnu.org/licenses/>. 
