@@ -77,7 +77,7 @@ loadflag = 1;
 put('loadflag',loadflag);
 
 % Version number
-handles.ThisVersion='1.74';
+handles.ThisVersion='1.75';
 
 % Include git information
 gitInfo=getGitInfo();
