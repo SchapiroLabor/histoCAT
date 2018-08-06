@@ -51,10 +51,16 @@ BasicFeatures = {'Area', 'Eccentricity', 'Solidity', 'Extent', ...
 XY = {'X_position','Y_position'};
 allvarnames = [allvarnames_nospatial, BasicFeatures,XY];
 
-%Ask user whether to use arcsinh transform or not
-arcsinh_boolean = inputdlg('Do you want to arcsinh tranform the data? If yes, please specify a suitable cofactor (5 is often used).','arcsinh',1,{'Do not transform data'});
-if strcmp(char(arcsinh_boolean),'Do not transform data')
-    arcsinh_boolean = [];
+% Ask user how to transform the data
+option_list = {'Do not transform data','arcsinh','log'};
+% Get response
+transform_option = listdlg('ListString',option_list);
+% Extract the string which was selected
+transform_option_string = option_list(transform_option);
+
+% If arcsinh selected, what co-factor should be used?
+if strcmp(transform_option_string,'arcsinh')==1
+    arcsinh_cofactor = inputdlg('Please specify a suitable cofactor (5 is often used).','arcsinh');
 end
 
 %Loop over all masks
@@ -85,11 +91,13 @@ for k=1:size(masks,2)
             %Add X and Y coordinates to output
             props_spatial_XY = regionprops(Current_Mask, 'Centroid');
             
-            %Transform single cell data by arcsinh if selected by user
-            if isempty(arcsinh_boolean)
-                Current_singlecellinfo_nospatial = mean_tab;
-            else
-                Current_singlecellinfo_nospatial = asinh(mean_tab ./ arcsinh_boolean{1});
+            %Transform single cell data as selected by user
+            if strcmp(transform_option_string,'Do not transform data')==1
+               Current_singlecellinfo_nospatial = mean_tab;
+            elseif strcmp(transform_option_string,'arcsinh')==1
+               Current_singlecellinfo_nospatial = asinh(mean_tab ./ arcsinh_cofactor{1});
+            elseif strcmp(transform_option_string,'log')==1
+               Current_singlecellinfo_nospatial = log(mean_tab);
             end
             
             %If RNA channels with spot detection masks are in the sample,
