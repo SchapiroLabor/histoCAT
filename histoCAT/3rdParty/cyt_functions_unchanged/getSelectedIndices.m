@@ -27,7 +27,7 @@ if (numel(selected_gates) == 1)
     if isempty(indices) == 1
         channels = gates{selected_gates, 3};
     else
-        getthoseNtzeros = find(~all(sessionData(indices,1:length(gates{selected_gates,3})) == 0));
+        getthoseNtzeros = find(~all(sessionData(indices,1:length(gates{selected_gates,3})) == 0,1));
         channels =  gates{selected_gates, 3}(getthoseNtzeros);
         getNtneighbrs = find(~strncmp('neighbour',channels,9));
         if ~isempty(getNtneighbrs)
@@ -52,7 +52,7 @@ else
                 channels = channels(getNtneighbrs);
             end
         else
-            getthoseNtzeros = find(~all(sessionData(curidices,1:length(gates{i,3})) == 0));
+            getthoseNtzeros = find(~all(sessionData(curidices,1:length(gates{i,3})) == 0,1));
             indices = union(gates{i, 2}, indices);
             channels = intersect(gates{i,3}(getthoseNtzeros),channels,'stable');
             getNtneighbrs = find(~strncmp('neighbour',channels,9));
