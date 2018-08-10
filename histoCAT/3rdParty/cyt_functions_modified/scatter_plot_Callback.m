@@ -169,8 +169,9 @@ colorbar off;
 %If more than one gate is selected, make legend of which gate corresponds
 %to which color
 if numel(selected_gates) > 1
-    legend_gates = legend(remove_repeating_strings(gates(selected_gates, 1)), 'Interpreter', 'none',1);
+    legend_gates = legend(remove_repeating_strings(gates(selected_gates, 1)));
     put('legend_gates',legend_gates);
+    set(legend_gates, 'Interpreter', 'none');
     drawnow;
     hplots_gates.Position = [0.0750 0.0900 0.90 0.88];
     if (numel(selected_gates) > 6)
