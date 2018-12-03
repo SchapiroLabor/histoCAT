@@ -1,4 +1,4 @@
-function [c,Q,bestpartition,bestpartitionhierarchy] = LouvainfromBin( filename, numiters )
+function [c,Q,bestpartition,bestpartitionhierarchy] = LouvainfromBin( filename, numiters, random_seed )
 % LOUVAINFROMBIN
 %
 % This function is modified from CYT (Dana Pe'er Lab)
@@ -23,7 +23,13 @@ hWaitbar = waitbar(0,'Running Phenograph, Please wait...');
 for iter = 1:numiters
     
     fprintf(1,'MATLAB: running community detection, ITERATION %i\n', iter );
-    command = [ps 'community ' filename '_graph.bin -l -1 -v -w ' filename '_graph.weights > ' filename '.tree'];
+    if strcmpi(random_seed,'Yes')
+        command = [ps 'community ' filename '_graph.bin -l -1 -v -w ' filename '_graph.weights > ' filename '.tree'];
+    elseif strcmpi(random_seed,'No')
+        command = [ps 'community ' filename '_graph.bin -l -1 -v -s 2 -w ' filename '_graph.weights > ' filename '.tree'];
+        display(['iter' iter]);
+    end
+    
     fprintf( 1, '%s\n', command );
     [~,r] = system( command );
     fprintf(1, '\n');

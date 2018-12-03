@@ -10,12 +10,13 @@
 %     'G', graph
 %     'IDX', IDX
 %     'graphtype', 'jaccard' or 'knn'
+%     'random_seed', 'yes' or 'no'
 % OUTPUT:
 %     labels - n x 1 vector of cluster assignments
 %     G      - n x n sparse matrix representation of the (lower triangle)
 %              of the Jaccard graph used for community detection
 % -----------------------------------------------------------------------
-function [labels,communities,G,uniqueID] = phenograph( data, k, varargin )
+function [labels,communities,G,uniqueID] = phenograph( data, k, varargin)
 
 distance = 'euclidean';
 graphtype = 'jaccard';
@@ -30,6 +31,8 @@ if nargin >2
                 distance = varargin{i+1};
             case 'graphtype'
                 graphtype = varargin{i+1};
+            case 'random_seed'
+                random_seed = varargin{i+1};
         end
     end
 end
@@ -69,7 +72,7 @@ niter = 20;
 if ispc == 1
     [c,Q,labels,communities] = LouvainfromBin_Windows(fullfile(custom_gates,'G.bin'),niter);
 elseif ismac
-    [c,Q,labels,communities] = LouvainfromBin(fullfile(custom_gates,'G.bin'),niter);
+    [c,Q,labels,communities] = LouvainfromBin(fullfile(custom_gates,'G.bin'),niter,random_seed);
 elseif isunix
     [c,Q,labels,communities] = LouvainfromBin_ubuntu(fullfile(custom_gates,'G.bin'),niter);
 end

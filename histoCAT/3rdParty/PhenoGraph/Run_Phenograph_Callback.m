@@ -29,8 +29,12 @@ near_neighbors_cell = inputdlg('Nearst Neighbors','Nearst Neighbors',1,{'30'});
 if isempty(near_neighbors_cell) == 1
     return;
 end
+
+% Random seed yes or no
+random_seed = questdlg('Random seed - Yes or No?','Random seed - Yes or No?',{'Yes','No'});
+
 near_neighbors = str2num(near_neighbors_cell{:});
-[labels,~,~] = phenograph(data, near_neighbors);
+[labels,~,~] = phenograph(data, near_neighbors,'random_seed',random_seed);
 
 %remove fixed seed for name generation
 rng('shuffle');
