@@ -38,6 +38,7 @@ int type       = UNWEIGHTED;
 int nb_pass    = 0;
 double precision = 0.000001;
 int display_level = -2;
+int random_seed =time(NULL)+getpid();
 int k1 = 16;
 
 bool verbose = false;
@@ -45,7 +46,7 @@ bool verbose = false;
 void
 usage(char *prog_name, const char *more) {
   cerr << more;
-  cerr << "usage: " << prog_name << " input_file [-w weight_file] [-p part_file] [-q epsilon] [-l display_level] [-v] [-h]" << endl << endl;
+  cerr << "usage: " << prog_name << " input_file [-w weight_file] [-p part_file] [-q epsilon] [-l display_level] [-v] [-s random_seed] [-h]" << endl << endl;
   cerr << "input_file: file containing the graph to decompose in communities." << endl;
   cerr << "-w file\tread the graph as a weighted one (weights are set to 1 otherwise)." << endl;
   cerr << "-p file\tstart the computation with a given partition instead of the trivial partition." << endl;
@@ -54,6 +55,7 @@ usage(char *prog_name, const char *more) {
   cerr << "-l k\tdisplays the graph of level k rather than the hierachical structure." << endl;
   cerr << "\tif k=-1 then displays the hierarchical structure rather than the graph at a given level." << endl;
   cerr << "-v\tverbose mode: gives computation time, information about the hierarchy and modularity." << endl;
+  cerr << "-s\trandom seed: if empty a new seed is used each run." << endl;
   cerr << "-h\tshow this usage message." << endl;
   exit(0);
 }
@@ -90,6 +92,10 @@ parse_args(int argc, char **argv) {
       case 'v':
 	verbose=true;
 	break;
+      case 's':
+    random_seed= atoi(argv[i+1]);
+    i++;
+    break;
       default:
 	usage(argv[0], "Unknown option\n");
       }
@@ -112,9 +118,9 @@ display_time(const char *str) {
 
 int
 main(int argc, char **argv) {
-  srand(time(NULL)+getpid());
 
   parse_args(argc, argv);
+  srand(random_seed);
   time_t time_begin, time_end;
   time(&time_begin);
   if (verbose)
