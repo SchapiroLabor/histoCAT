@@ -29,18 +29,28 @@ expansion_name = ['neighbour_',num2str(pixelexpansion),'_CellId'];
 % Get neighbor index for each image
 neigb_index = cellfun(@(x) find(~cellfun('isempty',regexp(x,expansion_name))),...
     gates(selectedall_gates,3),'UniformOutput',false);
+
 % Get phenograph index for each image
 Phenograph_index = cellfun(@(x) find(~cellfun('isempty',regexp(x,'Phenograph'))),...
     gates(selectedall_gates,3),'UniformOutput',false);
+% Check if clustering methods are present across samples
+[Phenograph_index_tested] = Check_if_equal_and_replace(Phenograph_index);
+
 % Get custom clustering index for each image
 CustomClustering_index = cellfun(@(x) find(~cellfun('isempty',regexp(x,'customClusters'))),...
     gates(selectedall_gates,3),'UniformOutput',false);
+% Check if clustering methods are present across samples
+[CustomClustering_index_tested] = Check_if_equal_and_replace(CustomClustering_index);
+
 % Get custom clustering index for each image
 kmeans_index = cellfun(@(x) find(~cellfun('isempty',regexp(x,'k_mean'))),...
     gates(selectedall_gates,3),'UniformOutput',false);
+% Check if clustering methods are present across samples
+[kmeans_index_tested] = Check_if_equal_and_replace(kmeans_index);
+
 
 %Indices of all possible clustering methods
-all_clusterings = [cell2mat(Phenograph_index), cell2mat(CustomClustering_index),cell2mat(kmeans_index)];
+all_clusterings = [cell2mat(Phenograph_index_tested), cell2mat(CustomClustering_index_tested),cell2mat(kmeans_index_tested)];
 
 
 % for multiple phenograph runs
