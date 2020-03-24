@@ -4,7 +4,7 @@
 
 Histology Topography Cytometry Analysis Toolbox (histoCAT) is a package to visualize and analyse multiplexed image cytometry data interactively.
 
-Cite: <https://www.nature.com/nmeth/journal/vaop/ncurrent/full/nmeth.4391.html>
+Cite: <https://www.nature.com/articles/nmeth.4391>
 
 ## Getting Started 
 
