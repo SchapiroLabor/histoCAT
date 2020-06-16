@@ -1,4 +1,3 @@
-![Version](https://img.shields.io/badge/1.8-version-green)
 # Welcome
 
 ![histoCAT Logo ](histoCAT.png)
