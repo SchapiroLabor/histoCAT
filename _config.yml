@@ -1,2 +1,4 @@
 theme: jekyll-theme-minimal
 title: histoCAT
+# Google Analytics
+google_analytics: UA-169597249-2
