@@ -95,7 +95,7 @@ for k=1:size(masks,2)
             if strcmp(transform_option_string,'Do not transform data')==1
                Current_singlecellinfo_nospatial = mean_tab;
             elseif strcmp(transform_option_string,'arcsinh')==1
-               Current_singlecellinfo_nospatial = asinh(mean_tab ./ arcsinh_cofactor{1});
+               Current_singlecellinfo_nospatial = asinh(mean_tab ./ str2num(arcsinh_cofactor{1}));
             elseif strcmp(transform_option_string,'log')==1
                Current_singlecellinfo_nospatial = log(mean_tab);
             end
