@@ -116,7 +116,7 @@ else
     
     % Search for special cases
     Special_clusters = [];
-    Special_clusters = find(~cellfun(@isempty,regexp(Unique_all_string_names,Special_clusters_name,'match')));
+    Special_clusters = find(~cellfun(@isempty,regexp(Unique_all_string_names,strcat('_',Special_clusters_name,'$|^',Special_clusters_name,'_'),'match')));
     Special_cluster= Matrix_Delta(:,Special_clusters);
     
     % Show heatmap
