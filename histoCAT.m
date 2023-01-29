@@ -54,6 +54,11 @@ function histoCAT_OpeningFcn(hObject, eventdata, handles, varargin)
 % handles    structure with handles and user data (see GUIDATA)
 % varargin   command line arguments to histoCAT (see VARARGIN)
 
+% add log file
+% currentFolder = pwd;
+% diary_file = fullfile(currentFolder, 'compiled_app_log.txt')
+% diary(diary_file)
+
 % Choose default command line output for histoCAT
 handles.output = hObject;
 
