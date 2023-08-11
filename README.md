@@ -24,18 +24,6 @@ We are currently working on the [histoCAT wiki](https://github.com/SchapiroLabor
 
 For further details please read the corresponding manual available at <https://github.com/BodenmillerGroup/histoCAT/releases>.
 
-## Example datasets
-
-Please find a small example data set with every release at <https://github.com/BodenmillerGroup/histoCAT/releases>
-
-The Nature Methods breast cancer raw data set (large) can be found here:
-[52 Breast Cancer Samples](http://www.bodenmillerlab.org/histoCAT_downloads/Data_52_BreastCancerSamples.zip)
-
-The Nature Methods breast cancer data set (large) as a histoCAT session data can be found here: [Session Data](http://www.bodenmillerlab.org/histoCAT_downloads/histoCAT_sessionResubmission.mat)
-
-All other data associated with the Nature Methods publication can be found here:
-[histoCAT@BodenmillerLab.org](http://www.bodenmillerlab.org/research-2/histocat/)
-
 ## Using histoCAT from source
 
 Please use MATLAB2014b and load the full histoCAT folder into your MATLAB path. Run `histoCAT.m` to start histoCAT from source.
