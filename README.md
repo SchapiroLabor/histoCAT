@@ -8,19 +8,19 @@ Cite: <https://www.nature.com/articles/nmeth.4391>
 
 ## Getting Started 
 
-histoCAT is automatically installed from the web when running the app installer file corresponding to your operating system which is available at <https://github.com/BodenmillerGroup/histoCAT/releases>. 
+histoCAT is automatically installed from the web when running the app installer file corresponding to your operating system which is available at <https://github.com/SchapiroLabor/histoCAT/releases>. 
 
 Windows users must have Visual Studio installed for features like PhenoGraph to function. If it’s not already installed on your computer download it from <https://www.visualstudio.com/downloads/>.
 
-For further informations read the corresponding manual available at <https://github.com/BodenmillerGroup/histoCAT/releases>.
+For further informations read the corresponding manual available at <https://github.com/SchapiroLabor/histoCAT/releases>.
 
 ## Installation
 
-Detailed installation instructions are available in the installation manual at <https://github.com/BodenmillerGroup/histoCAT/releases>.
+Detailed installation instructions are available in the installation manual at <https://github.com/SchapiroLabor/histoCAT/releases>.
 
 ## User instructions
 
-We are currently working on the [histoCAT wiki](https://github.com/BodenmillerGroup/histoCAT/wiki)
+We are currently working on the [histoCAT wiki](https://github.com/SchapiroLabor/histoCAT/wiki)
 
 For further details please read the corresponding manual available at <https://github.com/BodenmillerGroup/histoCAT/releases>.
 
