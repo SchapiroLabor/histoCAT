@@ -26,5 +26,13 @@ For further details please read the corresponding manual available at <https://g
 
 ## Using histoCAT from source
 
-Please use MATLAB2014b and load the full histoCAT folder into your MATLAB path. Run `histoCAT.m` to start histoCAT from source.
-
+- Use MATLAB 2024b, if other versions does not work.
+- Make sure following are installed
+    - uipickfiles
+    - Image Processing Toolbox
+    - Statistics and Machine Learning Toolbox
+    - Parallel Computing Toolbox
+    - Matlab Compiler (Only if you want to produce compiled installers)
+- In the MATLAB IDE, navigate to the root of this repository, make sure you are in histoCAT/ folder and not in the `histoCAT/histoCAT/` subfolder
+- In the MATLAB IDE, run `addpath(genpath(pwd))`, this makes sure all functions defined in the .m files in the subfolders are accessible.
+- Run `histoCAT` to start histoCAT from source.
