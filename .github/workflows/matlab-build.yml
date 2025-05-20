@@ -1,0 +1,41 @@
+name: MATLAB Build
+
+on:
+  #push:
+  #  branches: [ main, master ]
+  #pull_request:
+  #  branches: [ main, master ]
+  workflow_dispatch: # Allow manual triggering
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+      
+    - name: Check out repository
+      uses: actions/checkout@v4
+      
+    - name: Set up MATLAB
+      uses: matlab-actions/setup-matlab@v2
+      
+    - name: Run MATLAB Command
+      uses: matlab-actions/run-command@v1
+      with:
+        command: addpath(genpath('.')); disp('MATLAB environment initialized');
+        
+    #- name: Run MATLAB Compiler
+    #  uses: matlab-actions/run-command@v1
+    #  with:
+    #    command: mcc -m histoCAT.m -o histoCAT_compiled -a . -a ./histoCAT -a ./graphics -a ./3rdPartyLicenses -R -nodisplay
+    #    
+    #- name: Upload compiled artifacts
+    #  uses: actions/upload-artifact@v3
+    #  with:
+    #    name: histoCAT-compiled
+    #    path: |
+    #      histoCAT_compiled
+    #      *.exe
+    #      *.ctf
+    #      *.dll
+    #      readme.txt
