@@ -215,6 +215,18 @@ for i=start:nfcs+start-1
             if isempty(Fcs_Interest_all{hshidx,1}) ~= 1
                 %Add data to giant sessionData matrix
                 currInd = size(sessionData, 1);
+                %before calling table2dataset, we should validate that
+                %columns names are of valid characters, otherwise it throws
+                %an error
+                try
+                    validateColumnNames(Fcs_Interest_all{hshidx,1}.Properties.VariableNames)
+                catch error
+                    % Create the error message string
+                    errordlg(sprintf('An error occurred:\n%s', error.message),'File Error');
+                    close(hWaitbar);
+                    return;
+                end
+
                 fcsdata = table2dataset(Fcs_Interest_all{hshidx,1});
                 
                 %From the index filled+1 to the size of the fcs
