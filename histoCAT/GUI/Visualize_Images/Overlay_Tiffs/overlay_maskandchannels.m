@@ -108,21 +108,7 @@ for imh = 1:length(gate_names)
         if vis_samples == 1
             
             %Get the single-cell data of the current gate
-            
-            % Fix by Yusuf
-            % Line with error:
-            %   cur_img = double(table2dataset(Fcs_Interest_all{sample_orderIDX(imh),1}));
-            % Error:
-            % Error using table2dataset (line 12)
-            %'Cell_CD44(Gd160Di)' is not a valid dataset variable name. Dataset variable
-            % names must be valid MATLAB identifiers, while table variable names do not need
-            %to be. To make variable names valid before converting to dataset, use
-            %t.Properties.VariableNames =
-            %matlab.lang.makeValidName(t.Properties.VariableNames).
-            %Fix:
-            tmp_table = Fcs_Interest_all{sample_orderIDX(imh),1};
-            tmp_table.Properties.VariableNames = matlab.lang.makeValidName(tmp_table.Properties.VariableNames);
-            cur_img = double(table2dataset(tmp_table));
+            cur_img = double(table2dataset(Fcs_Interest_all{sample_orderIDX(imh),1}));
             
             %Get the channel names from the channels listbox
             list_nam = get(handles.list_channels,'String');

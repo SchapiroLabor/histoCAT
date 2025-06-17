@@ -215,27 +215,7 @@ for i=start:nfcs+start-1
             if isempty(Fcs_Interest_all{hshidx,1}) ~= 1
                 %Add data to giant sessionData matrix
                 currInd = size(sessionData, 1);
-
-
-
-                % The next two lines are added to fix the error: 
-                % error producing code:
-
-                %fcsdata = table2dataset(Fcs_Interest_all{hshidx,1});
-                % Error:
-                % 'Cell_CD44(Gd160Di)' is not a valid dataset variable name. 
-                % Dataset variable names must be valid MATLAB identifiers, 
-                % while table variable names do not need to be. To make variable names 
-                % valid before converting to dataset, use 
-                % t.Properties.VariableNames = 
-                % matlab.lang.makeValidName(t.Properties.VariableNames).
-                % my fix(by yusuf):
-                tmp_table = Fcs_Interest_all{hshidx,1};
-                tmp_table.Properties.VariableNames = matlab.lang.makeValidName(tmp_table.Properties.VariableNames);
-
-                fcsdata = table2dataset(tmp_table);
-                
-
+                fcsdata = table2dataset(Fcs_Interest_all{hshidx,1});
                 
                 %From the index filled+1 to the size of the fcs
                 sessionData(currInd+1:currInd+size(Fcs_Interest_all{hshidx,1},1), 1:size(Fcs_Interest_all{hshidx,1},2)) = double(fcsdata);
