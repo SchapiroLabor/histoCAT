@@ -55,7 +55,7 @@ toc
 
 
 %Function call to store the sample data
-store_sessionData(samplefolders,fcsfiles_path,Sample_Set_arranged,Fcs_Interest_all,HashID,Mask_all );
+store_sessionData(samplefolders,fcsfiles_path,Sample_Set_arranged,Fcs_Interest_all,HashID,Mask_all, handles);
 
 %Retrieve gates
 gates = retr('gates');
