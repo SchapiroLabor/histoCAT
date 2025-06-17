@@ -47,7 +47,10 @@ if strcmp(handles.visualize_options.String{handles.visualize_options.Value},...
         
     else
         %Function call to select area on tiff
-        Area_selection_Tiff(current_axes,Sample_Set_arranged,Mask_all,Fcs_Interest_all);
+        [success] = Area_selection_Tiff(current_axes,Sample_Set_arranged,Mask_all,Fcs_Interest_all);
+        if ~success
+            return
+        end
         
         %Retrieve data of area selection tool
         area_selected = retr('area_selected');

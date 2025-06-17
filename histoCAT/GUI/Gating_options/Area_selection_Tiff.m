@@ -1,4 +1,4 @@
-function Area_selection_Tiff(current_axes,Sample_Set_arranged,Mask_all,Fcs_Interest_all)
+function success = Area_selection_Tiff(current_axes,Sample_Set_arranged,Mask_all,Fcs_Interest_all)
 % AREA_SELECTION_TIFF: Enables user to manually gate on tiff-image by
 % encircleing an area with the cursor.
 %
@@ -75,6 +75,13 @@ hold on;
 %Function call tio selectdata
 [~,xselect,yselect] = selectdata('selectionmode','lasso');
 
+%Check if the selection is empty, if so, report the user
+if isempty(vertcat(xselect{:})) || isempty(vertcat(yselect{:}))
+    errordlg("It seems like your selection did not contain any data points, please try again.",'File Error');
+    success = false;
+    return
+end
+
 %Store the selected positions
 selected_position(:,1) = vertcat(xselect{:});
 selected_position(:,2) = vertcat(yselect{:});
@@ -113,6 +120,8 @@ area_notselected = allfcs_session(notCellIdrows,:);
 put('area_selected',area_selected);
 put('CellIdrows',CellIdrows);
 put('area_notselected',area_notselected);
+
+success=true;
 
 end
 
