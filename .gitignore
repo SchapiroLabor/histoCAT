@@ -1,3 +1,7 @@
+# app compilation and installer output folder
+compilation_output/
+installer_output/
+
 # Windows default autosave extension
 *.asv
 

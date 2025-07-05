@@ -1,3 +1,13 @@
+%#function  Master_LoadSamples
+%#function  uisplitpane
+%#function  visualize_button_Callback
+%#function  list_channels_Callback
+%#function  visualize_options_Callback
+%#function  analyze_options_Callback
+%#function  analyze_button_Callback
+%#function  list_samples_Callback
+
+
 function varargout = histoCAT(varargin)
 % HISTOCAT MATLAB code for histoCAT.fig
 %      HISTOCAT, by itself, creates a new HISTOCAT or raises the existing
@@ -82,7 +92,7 @@ loadflag = 1;
 put('loadflag',loadflag);
 
 % Version number
-handles.ThisVersion='1.77';
+handles.ThisVersion=get_histoCAT_version;
 
 % Include git information
 gitInfo=getGitInfo();
