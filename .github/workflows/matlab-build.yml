@@ -7,9 +7,19 @@ on:
   #  branches: [ main, master ]
   workflow_dispatch: # Allow manual triggering
 
+env:
+  MLM_LICENSE_TOKEN: ${{ secrets.matlab_token }}
+
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [
+          #ubuntu-latest, 
+          windows-latest, 
+          #macos-latest
+          ]
     
     steps:
       
@@ -24,18 +34,18 @@ jobs:
       with:
         command: addpath(genpath('.')); disp('MATLAB environment initialized');
         
-    #- name: Run MATLAB Compiler
-    #  uses: matlab-actions/run-command@v1
-    #  with:
-    #    command: mcc -m histoCAT.m -o histoCAT_compiled -a . -a ./histoCAT -a ./graphics -a ./3rdPartyLicenses -R -nodisplay
-    #    
-    #- name: Upload compiled artifacts
-    #  uses: actions/upload-artifact@v3
-    #  with:
-    #    name: histoCAT-compiled
-    #    path: |
-    #      histoCAT_compiled
-    #      *.exe
-    #      *.ctf
-    #      *.dll
-    #      readme.txt
+    - name: Run MATLAB Compiler
+      uses: matlab-actions /run-command@v1
+      with:
+        command: mcc -m histoCAT.m -o histoCAT_compiled -a . -a ./histoCAT -a ./graphics -a ./3rdPartyLicenses -R -nodisplay
+        
+    - name: Upload compiled artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: histoCAT-compiled
+        path: |
+          histoCAT_compiled
+          *.exe
+          *.ctf
+          *.dll
+          readme.txt
