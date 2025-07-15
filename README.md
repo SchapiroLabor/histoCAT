@@ -35,3 +35,4 @@ For further details please read the corresponding manual available at <https://g
 - In the MATLAB IDE, navigate to the root of this repository, make sure you are in histoCAT/ folder and not in the `histoCAT/histoCAT/` subfolder
 - In the MATLAB IDE, run `addpath(genpath(pwd))`, this makes sure all functions defined in the .m files in the subfolders are accessible.
 - Run `histoCAT` to start histoCAT from source.
+- Run `compile` to compile and produce installer for histoCAT.
