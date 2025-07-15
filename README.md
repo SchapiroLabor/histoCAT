@@ -26,7 +26,7 @@ For further details please read the corresponding manual available at <https://g
 
 ## Using histoCAT from source
 
-- Use MATLAB 2024b, if other versions does not work.
+- Use MATLAB 2022b, newer versions are not compatible with the codebase.
 - Make sure following are installed
     - uipickfiles
     - Image Processing Toolbox
