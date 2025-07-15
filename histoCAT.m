@@ -1,12 +1,24 @@
 %#function  Master_LoadSamples
+%#function  Load_sessionData
+%#function  Savetiff_fig
+%#function  SavePlot
+%#function  ExportCSV_singlecells
+%#function  export_fcs
 %#function  uisplitpane
 %#function  visualize_button_Callback
 %#function  list_channels_Callback
-%#function  visualize_options_Callback
 %#function  analyze_options_Callback
 %#function  analyze_button_Callback
 %#function  list_samples_Callback
-
+%#function  preparesample_button_Callback
+%#function  visualize_button_Callback
+%#function  visualize_options_Callback
+%#function  plot_mask_Callback
+%#function  Pixelexpansion_callback
+%#function  remove_options_Callback
+%#function  regressionline_checkbox_callback
+%#function  b2r_checkbox_callback
+%#function  median_checkbox_callback
 
 function varargout = histoCAT(varargin)
 % HISTOCAT MATLAB code for histoCAT.fig
