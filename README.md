@@ -28,7 +28,6 @@ For further details please read the corresponding manual available at <https://g
 
 - Use MATLAB 2022b, newer versions are not compatible with the codebase.
 - Make sure following are installed
-    - uipickfiles
     - Image Processing Toolbox
     - Statistics and Machine Learning Toolbox
     - Parallel Computing Toolbox
