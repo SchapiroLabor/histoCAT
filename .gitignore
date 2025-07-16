@@ -1,10 +1,6 @@
 #Automatically created file on MacOS by finder app
 .DS_Store
 
-# app compilation and installer output folder
-compilation_output/
-installer_output/
-
 # Windows default autosave extension
 *.asv
 
