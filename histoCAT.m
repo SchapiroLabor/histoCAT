@@ -19,6 +19,7 @@
 %#function  regressionline_checkbox_callback
 %#function  b2r_checkbox_callback
 %#function  median_checkbox_callback
+%#function  save_sessiondata
 
 function varargout = histoCAT(varargin)
 % HISTOCAT MATLAB code for histoCAT.fig
