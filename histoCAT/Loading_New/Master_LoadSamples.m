@@ -23,7 +23,7 @@ global Fcs_Interest_all
 global HashID
 
 %Function call to store the sample folder
-[ samplefolders,fcsfiles_path,HashID] = Load_SampleFolders(HashID);
+[ samplefolders,fcsfiles_path,HashID ] = Load_SampleFolders(HashID);
 
 %If no samples are found return
 if isempty(samplefolders) == 1
@@ -83,7 +83,12 @@ set(handles.remove_options,'Enable','on');
 
 %Create a custom folder to store all gated files
 if loadflag == 1
-    pathname = uigetdir('Prompt','Where do you want to store the custom gates?');
+    % in macos and linux, they may not see a title in dialog box, so tell the prompt beforehand
+    store_gate_prompt = 'Where do you want to store the custom gates?';
+    if ~ispc 
+        uiwait(msgbox(store_gate_prompt, 'Info', 'modal'));
+    end
+    pathname = uigetdir(getLoadDirStartingPath,store_gate_prompt);
     custom_gatesfolder = fullfile(pathname,'custom_gates_0');
     
     % Check if folder includes spaces
