@@ -135,22 +135,9 @@ varargout{1} = handles.output;
 % Choose default command line output for histoCAT
 handles.output = hObject;
 
-% Get the latest version from the html document:
-[NewVersion,status] = urlread('https://github.com/BodenmillerGroup/histoCAT/raw/master/histoCAT_version.txt'); 
+% TODO: IMPLEMENT NEW VERSION ALERT
+% OLD VERSION ALERT EXISTED HERE, BUT DELETED DUE TO LAB CHANGE
 
-if ~isempty(NewVersion)==1
-    % If NewVersion not str
-    if ischar(NewVersion) == 1
-        NewVersion = NewVersion(1,:);
-    end
-    
-    
-    % Check if latest version is newer than this versiochan:
-    if status~=0 && str2double(handles.ThisVersion)<str2double(NewVersion)
-        msgbox({'There is a new version available. Please contact denis.schapiro@uzh.ch',...
-            'or go to https://github.com/BodenmillerGroup/histoCAT'}, 'Note');
-    end
-end
 end
 
 
