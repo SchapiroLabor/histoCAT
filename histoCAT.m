@@ -104,17 +104,8 @@ clearvars -global
 loadflag = 1;
 put('loadflag',loadflag);
 
-% Version number
-handles.ThisVersion=get_histoCAT_version;
 
-% Include git information
-gitInfo=getGitInfo();
-% if no git file included
-if isempty(gitInfo) == 1
-    set(handles.figure1, 'Name', ['histoCAT_',handles.ThisVersion]);
-else
-    set(handles.figure1, 'Name', ['histoCAT_',handles.ThisVersion,'  ',gitInfo.hash]);
-end
+set(handles.figure1, 'Name', ['histoCAT_',get_histoCAT_version,'  ',get_git_hash]);
 
 % Update handles structure
 guidata(hObject, handles);
