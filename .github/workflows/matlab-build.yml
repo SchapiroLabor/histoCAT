@@ -33,7 +33,7 @@ jobs:
           Image_Processing_Toolbox
           Statistics_and_Machine_Learning_Toolbox
           Parallel_Computing_Toolbox
-          Matlab_Compiler
+          Matlab Compiler
       
     - name: Run MATLAB Command
       uses: matlab-actions/run-command@v2
