@@ -35,17 +35,13 @@ jobs:
         command: addpath(genpath('.')); disp('MATLAB environment initialized');
         
     - name: Run MATLAB Compiler
-      uses: matlab-actions /run-command@v2
+      uses: matlab-actions/run-command@v2
       with:
         command: compile
         
-    #- name: Upload compiled artifacts
-    #  uses: actions/upload-artifact@v3
-    #  with:
-    #    name: histoCAT-compiled
-    #    path: |
-    #      histoCAT_compiled
-    #      *.exe
-    #      *.ctf
-    #      *.dll
-    #      readme.txt
+    - name: Upload compiled artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: histoCAT-compiled
+        path: |
+          ../compilation_output
