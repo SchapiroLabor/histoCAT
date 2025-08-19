@@ -1,6 +1,9 @@
 #Compile time generated file
 get_git_hash.m
 
+compilation_output/
+installer_output/
+
 #HistoCAT generated data files
 loadDirStartingPath.mat
 
