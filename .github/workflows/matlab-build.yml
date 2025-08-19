@@ -29,11 +29,12 @@ jobs:
     - name: Set up MATLAB
       uses: matlab-actions/setup-matlab@v2
       with:
+        release: R2022b
         products: >
           Image_Processing_Toolbox
           Statistics_and_Machine_Learning_Toolbox
           Parallel_Computing_Toolbox
-          "Matlab Compiler"
+          Matlab_Compiler
       
     - name: Run MATLAB Command
       uses: matlab-actions/run-command@v2
