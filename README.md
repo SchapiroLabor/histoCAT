@@ -33,7 +33,13 @@ For further details please read the corresponding manual available at <https://g
 - In the expanded command line output, you will see the download link at the end.
 
 **For MACOS**
-You may encounter error "Apple could not verify histoCAT is free of malware that may harm your Mac or compromise your privacy.". To, fix this, run the following in command line
+
+If you have histoCAT already installed, delete your previous installation. This could be done through finder or via command line
+```
+rm -rf /Applications/histoCAT
+```
+
+Also, during installation, you may encounter error "Apple could not verify histoCAT is free of malware that may harm your Mac or compromise your privacy.". To, fix this, run the following in command line
 ```
 xattr -d com.apple.quarantine path_to_histoCAT_Installer.app
 ```
