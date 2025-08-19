@@ -1,4 +1,4 @@
-name: MATLAB Build
+name: compile HistoCAT
 
 on:
   #push:
@@ -49,5 +49,5 @@ jobs:
     - name: Upload compiled artifacts
       uses: actions/upload-artifact@v4
       with:
-        name: histoCAT-compiled
+        name: histoCAT_compiled
         path: installer_output/*
