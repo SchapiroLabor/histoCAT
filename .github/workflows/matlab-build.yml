@@ -49,5 +49,5 @@ jobs:
     - name: Upload compiled artifacts
       uses: actions/upload-artifact@v4
       with:
-        name: histoCAT_compiled
+        name: histoCAT_compiled_${{ matrix.os }} 
         path: installer_output/*
