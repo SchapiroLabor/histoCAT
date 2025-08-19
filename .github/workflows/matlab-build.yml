@@ -1,4 +1,4 @@
-name: compile HistoCAT
+name: compile_histoCAT
 
 on:
   #push:

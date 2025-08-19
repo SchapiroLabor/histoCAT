@@ -24,6 +24,20 @@ We are currently working on the [histoCAT wiki](https://github.com/SchapiroLabor
 
 For further details please read the corresponding manual available at <https://github.com/BodenmillerGroup/histoCAT/releases>.
 
+## Installing the latest cloud build.
+
+- Please go to https://github.com/yusufozgur/histoCAT/actions
+- click on the latest compile_histoCAT action's run
+- click on your desired operating system
+- in the github actions steps, click on "Upload Compiled Artifacts" step.
+- In the expanded command line output, you will see the download link at the end.
+
+**For MACOS**
+You may encounter error "Apple could not verify histoCAT is free of malware that may harm your Mac or compromise your privacy.". To, fix this, run the following in command line
+```
+xattr -d com.apple.quarantine path_to_histoCAT_Installer.app
+```
+
 ## Using histoCAT from source
 
 - Use MATLAB 2022b, newer versions are not compatible with the codebase.
