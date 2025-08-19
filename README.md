@@ -24,7 +24,7 @@ We are currently working on the [histoCAT wiki](https://github.com/SchapiroLabor
 
 For further details please read the corresponding manual available at <https://github.com/BodenmillerGroup/histoCAT/releases>.
 
-## Installing the latest cloud build.
+## Installing the latest cloud build
 
 - Please go to https://github.com/yusufozgur/histoCAT/actions
 - click on the latest compile_histoCAT action's run
