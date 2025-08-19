@@ -37,15 +37,15 @@ jobs:
     - name: Run MATLAB Compiler
       uses: matlab-actions /run-command@v1
       with:
-        command: mcc -m histoCAT.m -o histoCAT_compiled -a . -a ./histoCAT -a ./graphics -a ./3rdPartyLicenses -R -nodisplay
+        command: compile
         
-    - name: Upload compiled artifacts
-      uses: actions/upload-artifact@v3
-      with:
-        name: histoCAT-compiled
-        path: |
-          histoCAT_compiled
-          *.exe
-          *.ctf
-          *.dll
-          readme.txt
+    #- name: Upload compiled artifacts
+    #  uses: actions/upload-artifact@v3
+    #  with:
+    #    name: histoCAT-compiled
+    #    path: |
+    #      histoCAT_compiled
+    #      *.exe
+    #      *.ctf
+    #      *.dll
+    #      readme.txt
