@@ -28,9 +28,9 @@ For further details please read the corresponding manual available at <https://g
 
 - Please go to https://github.com/yusufozgur/histoCAT/actions
 - click on the latest compile_histoCAT action's run
-- click on your desired operating system
-- in the github actions steps, click on "Upload Compiled Artifacts" step.
-- In the expanded command line output, you will see the download link at the end.
+- At the bottom of the page, you will see artifact's, which are histoCAT builds for the following operating systems: Windows, Linux, MacOS.
+- If you are logged in to GitHub, you should be able to download your desired build.
+- Download the zip for zour operating system, extract the installer inside. Then run the installer.
 
 **For MACOS**
 
