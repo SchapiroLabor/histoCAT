@@ -35,7 +35,7 @@ jobs:
           Statistics_and_Machine_Learning_Toolbox
           Parallel_Computing_Toolbox
           MATLAB_Compiler
-          Mapping Toolbox
+          Mapping_Toolbox
       
     - name: Run MATLAB Command
       uses: matlab-actions/run-command@v2
