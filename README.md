@@ -52,6 +52,7 @@ xattr -d com.apple.quarantine path_to_histoCAT_Installer.app
     - Statistics and Machine Learning Toolbox
     - Parallel Computing Toolbox
     - Matlab Compiler (Only if you want to produce compiled installers)
+    - 
 - In the MATLAB IDE, navigate to the root of this repository, make sure you are in histoCAT/ folder and not in the `histoCAT/histoCAT/` subfolder
 - In the MATLAB IDE, run `addpath(genpath(pwd))`, this makes sure all functions defined in the .m files in the subfolders are accessible.
 - Run `histoCAT` to start histoCAT from source.
