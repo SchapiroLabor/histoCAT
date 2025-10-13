@@ -24,7 +24,41 @@ We are currently working on the [histoCAT wiki](https://github.com/SchapiroLabor
 
 For further details please read the corresponding manual available at <https://github.com/BodenmillerGroup/histoCAT/releases>.
 
+## Installing the latest cloud build
+
+- Please go to https://github.com/yusufozgur/histoCAT/actions
+- click on the latest compile_histoCAT action's run
+- At the bottom of the page, you will see artifact's, which are histoCAT builds for the following operating systems: Windows, Linux, MacOS.
+- If you are logged in to GitHub, you should be able to download your desired build.
+- Download the zip for zour operating system, extract the installer inside. Then run the installer.
+
+**For MACOS**
+
+If you have histoCAT already installed, delete your previous installation. This could be done through finder or via command line
+```
+rm -rf /Applications/histoCAT
+```
+
+Also, during installation, you may encounter error "Apple could not verify histoCAT is free of malware that may harm your Mac or compromise your privacy.". To, fix this, run the following in command line
+```
+xattr -d com.apple.quarantine path_to_histoCAT_Installer.app
+```
+
+If you need to run histoCAT from terminal on MacOS, run it using the script while providing Matlab Runtime Path
+```
+/Applications/histoCAT/application/run_histoCAT.sh /Applications/MATLAB/MATLAB_Runtime
+```
+
 ## Using histoCAT from source
 
-Please use MATLAB2014b and load the full histoCAT folder into your MATLAB path. Run `histoCAT.m` to start histoCAT from source.
-
+- Use MATLAB 2022b, newer versions are not compatible with the codebase.
+- Make sure following are installed
+    - Image Processing Toolbox
+    - Statistics and Machine Learning Toolbox
+    - Parallel Computing Toolbox
+    - Matlab Compiler (Only if you want to produce compiled installers)
+    - Mapping Toolbox
+- In the MATLAB IDE, navigate to the root of this repository, make sure you are in histoCAT/ folder and not in the `histoCAT/histoCAT/` subfolder
+- In the MATLAB IDE, run `set_path`, this makes sure all functions defined in the .m files in the subfolders are accessible, while excluding compilation folders.
+- Run `histoCAT` to start histoCAT from source.
+- Run `compile` to compile and produce installer for histoCAT.

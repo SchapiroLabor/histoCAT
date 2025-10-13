@@ -1,0 +1,43 @@
+#Compile time generated file
+get_git_hash.m
+
+compilation_output/
+installer_output/
+
+#HistoCAT generated data files
+loadDirStartingPath.mat
+
+#Automatically created file on MacOS by finder app
+.DS_Store
+
+# Windows default autosave extension
+*.asv
+
+# OSX / *nix default autosave extension
+*.m~
+
+# Compiled MEX binaries (all platforms)
+*.mex*
+
+# Packaged app and toolbox files
+*.mlappinstall
+*.mltbx
+
+# Generated helpsearch folders
+helpsearch*/
+
+# Simulink code generation folders
+slprj/
+sccprj/
+
+# Matlab code generation folders
+codegen/
+
+# Simulink autosave extension
+*.autosave
+
+# Simulink cache files
+*.slxc
+
+# Octave session info
+octave-workspace

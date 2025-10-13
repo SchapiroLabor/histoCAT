@@ -1,0 +1,54 @@
+name: compile_histoCAT
+
+on:
+  #push:
+  #  branches: [ main, master ]
+  #pull_request:
+  #  branches: [ main, master ]
+  workflow_dispatch: # Allow manual triggering
+
+env:
+  MLM_LICENSE_TOKEN: ${{ secrets.matlab_token }}
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [
+          ubuntu-latest, 
+          windows-latest, 
+          macos-latest
+          ]
+    
+    steps:
+      
+    - name: Check out repository
+      uses: actions/checkout@v4
+      
+    - name: Set up MATLAB
+      uses: matlab-actions/setup-matlab@v2
+      with:
+        release: R2022b
+        products: >
+          Image_Processing_Toolbox
+          Statistics_and_Machine_Learning_Toolbox
+          Parallel_Computing_Toolbox
+          MATLAB_Compiler
+          Mapping_Toolbox
+      
+    - name: Run MATLAB Command
+      uses: matlab-actions/run-command@v2
+      with:
+        command: addpath(genpath('.')); disp('MATLAB environment initialized');
+        
+    - name: Run compile.m
+      uses: matlab-actions/run-command@v2
+      with:
+        command: compile
+        
+    - name: Upload compiled artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: histoCAT_compiled_${{ matrix.os }} 
+        path: installer_output/*

@@ -114,6 +114,10 @@ loadflag = retr('loadflag');
  
 %Create a custom folder to store all automatically generated files
 if loadflag == 1
+    store_gate_prompt = 'Where do you want to store the custom gates?';
+    if ~ispc 
+        uiwait(msgbox(store_gate_prompt, 'Info', 'modal'));
+    end
     pathname = uigetdir('Prompt','Where do you want to store the custom gates?');
     custom_gatesfolder = fullfile(pathname,'custom_gates_0');
     if ~exist(custom_gatesfolder)

@@ -1,3 +1,26 @@
+%#function  Master_LoadSamples
+%#function  Load_sessionData
+%#function  Savetiff_fig
+%#function  SavePlot
+%#function  ExportCSV_singlecells
+%#function  export_fcs
+%#function  uisplitpane
+%#function  visualize_button_Callback
+%#function  list_channels_Callback
+%#function  analyze_options_Callback
+%#function  analyze_button_Callback
+%#function  list_samples_Callback
+%#function  preparesample_button_Callback
+%#function  visualize_button_Callback
+%#function  visualize_options_Callback
+%#function  plot_mask_Callback
+%#function  Pixelexpansion_callback
+%#function  remove_options_Callback
+%#function  regressionline_checkbox_callback
+%#function  b2r_checkbox_callback
+%#function  median_checkbox_callback
+%#function  save_sessiondata
+
 function varargout = histoCAT(varargin)
 % HISTOCAT MATLAB code for histoCAT.fig
 %      HISTOCAT, by itself, creates a new HISTOCAT or raises the existing
@@ -81,17 +104,8 @@ clearvars -global
 loadflag = 1;
 put('loadflag',loadflag);
 
-% Version number
-handles.ThisVersion='1.77';
 
-% Include git information
-gitInfo=getGitInfo();
-% if no git file included
-if isempty(gitInfo) == 1
-    set(handles.figure1, 'Name', ['histoCAT_',handles.ThisVersion]);
-else
-    set(handles.figure1, 'Name', ['histoCAT_',handles.ThisVersion,'  ',gitInfo.hash]);
-end
+set(handles.figure1, 'Name', ['histoCAT_',get_histoCAT_version,'  ',get_git_hash]);
 
 % Update handles structure
 guidata(hObject, handles);
@@ -112,22 +126,9 @@ varargout{1} = handles.output;
 % Choose default command line output for histoCAT
 handles.output = hObject;
 
-% Get the latest version from the html document:
-[NewVersion,status] = urlread('https://github.com/BodenmillerGroup/histoCAT/raw/master/histoCAT_version.txt'); 
+% TODO: IMPLEMENT NEW VERSION ALERT
+% OLD VERSION ALERT EXISTED HERE, BUT DELETED DUE TO LAB CHANGE
 
-if ~isempty(NewVersion)==1
-    % If NewVersion not str
-    if ischar(NewVersion) == 1
-        NewVersion = NewVersion(1,:);
-    end
-    
-    
-    % Check if latest version is newer than this versiochan:
-    if status~=0 && str2double(handles.ThisVersion)<str2double(NewVersion)
-        msgbox({'There is a new version available. Please contact denis.schapiro@uzh.ch',...
-            'or go to https://github.com/BodenmillerGroup/histoCAT'}, 'Note');
-    end
-end
 end
 
 

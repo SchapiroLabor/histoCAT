@@ -15,10 +15,23 @@ function [ samplefolders,fcsfiles_path,HashID ] = Load_SampleFolders(HashID,samp
 % Histology Topography Cytometry Analysis Toolbox (histoCAT)
 % Denis Schapiro - Bodenmiller Group - UZH
 
+
+%Initially, starting dir in uipickfiles is users home folder
+%After opening data, it gets updated to the first data folder's parent folder
+%This is done for ease of use for users that deal with loading data from the same
+%folder often.
+
 %For UnitTest
-if nargin == 1   
+if nargin == 1
     %Select sample folders
-    samplefolders = uipickfiles('Prompt','Select folders containing tiffs with/without segmentation mask'); 
+    %FilterSpec lets you choose starting folder and or the filter
+    samplefolders = uipickfiles(...
+        'Prompt','Select folders containing tiffs with/without segmentation mask',...
+        'FilterSpec', getLoadDirStartingPath); 
+    %After getting the data folders, set the new LoadDirStartingPath to the parent dir of first directory
+    [parentDir, ~, ~] = fileparts(samplefolders{1});
+    setLoadDirStartingPath(parentDir)
+
 end
 
 %Make sure user selected folders containing each samples and not individual

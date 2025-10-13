@@ -1,4 +1,4 @@
-function store_sessionData(samplefolders,fcsfiles_path,Sample_Set_arranged,Fcs_Interest_all,HashID,Mask_all)
+function store_sessionData(samplefolders,fcsfiles_path,Sample_Set_arranged,Fcs_Interest_all,HashID,Mask_all, handles)
 % STORE_SESSIONDATA: Stores sessionData, sessiondata_index, gates, allids
 % as GUI data during loading.
 %
@@ -215,6 +215,28 @@ for i=start:nfcs+start-1
             if isempty(Fcs_Interest_all{hshidx,1}) ~= 1
                 %Add data to giant sessionData matrix
                 currInd = size(sessionData, 1);
+                %before calling table2dataset, we should validate that
+                %columns names are of valid characters, otherwise it throws
+                %an error
+                try
+                    validateColumnNames(Fcs_Interest_all{hshidx,1}.Properties.VariableNames)
+                catch error
+
+                    % Create the error message string
+                    errordlg(sprintf('An error occurred:\n%s', error.message),'File Error');
+                    close(hWaitbar);
+                    
+                    
+                    % If you put just a return here, everything seems alright at
+                    % first but the next sample loading will have data from
+                    % previous load attempt. I could not fix this by
+                    % deleting global variables. So instead, I am fixing
+                    % this by closing the program.
+                    close(handles.figure1)
+                    return
+
+                end
+
                 fcsdata = table2dataset(Fcs_Interest_all{hshidx,1});
                 
                 %From the index filled+1 to the size of the fcs
