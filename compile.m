@@ -1,4 +1,4 @@
-addpath(genpath(pwd))
+set_path;
 save_git_hash;
 fprintf('Start compiling\n');
 buildResults = compiler.build.standaloneApplication('histoCAT.m', ...

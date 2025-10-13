@@ -44,6 +44,11 @@ Also, during installation, you may encounter error "Apple could not verify histo
 xattr -d com.apple.quarantine path_to_histoCAT_Installer.app
 ```
 
+If you need to run histoCAT from terminal on MacOS, run it using the script while providing Matlab Runtime Path
+```
+/Applications/histoCAT/application/run_histoCAT.sh /Applications/MATLAB/MATLAB_Runtime
+```
+
 ## Using histoCAT from source
 
 - Use MATLAB 2022b, newer versions are not compatible with the codebase.
@@ -54,6 +59,6 @@ xattr -d com.apple.quarantine path_to_histoCAT_Installer.app
     - Matlab Compiler (Only if you want to produce compiled installers)
     - Mapping Toolbox
 - In the MATLAB IDE, navigate to the root of this repository, make sure you are in histoCAT/ folder and not in the `histoCAT/histoCAT/` subfolder
-- In the MATLAB IDE, run `addpath(genpath(pwd))`, this makes sure all functions defined in the .m files in the subfolders are accessible.
+- In the MATLAB IDE, run `set_path`, this makes sure all functions defined in the .m files in the subfolders are accessible, while excluding compilation folders.
 - Run `histoCAT` to start histoCAT from source.
 - Run `compile` to compile and produce installer for histoCAT.
