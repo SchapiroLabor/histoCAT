@@ -3,7 +3,7 @@ We have release histoCAT_1.78.3, which now works on updated Windows and MacOS sy
 
 For the next major update, we would like to learn more about your individual use cases and current needs.
 
-Please fill out this survey to let us know your opinions: [HistoCAT survey](https://tinyurl.com/HistoCAT-survey)
+Please fill out this survey to let us know your opinions: [HistoCAT survey](https://tinyurl.com/histoCAT)
 
 # Welcome
 
