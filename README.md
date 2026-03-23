@@ -27,9 +27,7 @@ Detailed installation instructions are available in the installation manual at <
 
 ## User instructions
 
-We are currently working on the [histoCAT wiki](https://github.com/SchapiroLabor/histoCAT/wiki)
-
-For further details please read the corresponding manual available at <https://github.com/BodenmillerGroup/histoCAT/releases>.
+The latest version of the user manual can be found in our latest release: https://github.com/SchapiroLabor/histoCAT/releases
 
 ## Installing the latest cloud build
 
