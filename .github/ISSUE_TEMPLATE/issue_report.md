@@ -1,11 +1,11 @@
 ---
-name: Bug Report
-about: File a bug report
-labels: bug
+name: HistoCAT issue reporting template
+about: File an issue
+labels: issue
 ---
 
 ## Description
-<!-- Briefly describe the issue -->
+<!-- Describe the issue -->
 
 ## Steps to Reproduce
 1. 
